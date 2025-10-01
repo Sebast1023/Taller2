@@ -8,7 +8,7 @@ package udistrital.avanzada.taller2.control;
  * Punto de entrada de la aplicacion
  *
  * @author user
- * 30/09/2025
+ * @since 30/09/2025
  */
 public class Launcher {
 

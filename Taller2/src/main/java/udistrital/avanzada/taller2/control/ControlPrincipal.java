@@ -8,13 +8,16 @@ import udistrital.avanzada.taller2.vista.Ventana;
 
 /**
  * Logica de negocio
- * @author 
+ *
+ * @author
+ * @since 30/09/2025
  */
 public class ControlPrincipal {
+
     Ventana ventana;
 
     public ControlPrincipal() {
         this.ventana = new Ventana();
     }
-    
+
 }

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 /**
  *
  * @author 
+ * @since 30/09/2025
  */
 public class Ventana extends JFrame {
     

@@ -5,22 +5,26 @@
 package udistrital.avanzada.taller2.modelo;
 
 /**
- * Clase Jugador.java representa a los jugadores del juego
- * Sus instancias seran agrupadas en equipos de a 4
- * 
+ * Clase Jugador.java representa a los jugadores del juego Sus instancias seran
+ * agrupadas en equipos de a 4
+ *
  * @author Mauricio
  * @since 30/09/2025
  */
 public class Jugador {
+
     String nombre;
     String apodo;
     // imagen de la persona es una ubicacion local
-    String foto; 
+    String foto;
+
     // constructor
     public Jugador() {
     }
+
     /**
      * Constructor con los parametros
+     *
      * @param nombre
      * @param apodo
      * @param foto ubicacion local de la imagen
@@ -50,13 +54,14 @@ public class Jugador {
     public String getFoto() {
         return foto;
     }
+
     /**
      * metodo setter de la foto
+     *
      * @param foto ubicacion local de la imagen
      */
     public void setFoto(String foto) {
         this.foto = foto;
     }
-    
-    
+
 }
