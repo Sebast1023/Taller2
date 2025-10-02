@@ -7,8 +7,8 @@ package udistrital.avanzada.taller2.modelo;
 import java.io.Serializable;
 
 /**
- * Clase equipo que es la base del juego que es por equipos se tienen 4
- * jugadores por equipo.
+ * Clase equipo que es la base para el juego por equipos. Tienen 4 jugadores en
+ * un array primitivo.
  *
  * @author Mauricio
  * @version 1.0
@@ -34,6 +34,21 @@ public class Equipo implements Serializable {
         this.posicion = 0;
     }
 
+    /**
+     * Metodo para agregar jugador al array de jugadores
+     *
+     * @param jugador
+     */
+    public void agregarJugador(Jugador jugador) {
+        // No se agrega jugador si ya hay 4
+        if (posicion == jugadores.length - 1) {
+            return;
+        }
+        // Agregar en la posicion actual vacia
+        jugadores[posicion] = jugador;
+        posicion++;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -54,19 +69,8 @@ public class Equipo implements Serializable {
         return jugadores;
     }
 
-    /**
-     * Metodo para agregar jugador al array de jugadores
-     *
-     * @param jugador
-     */
-    public void agregarJugador(Jugador jugador) {
-        // No se agrega jugador si ya hay 4
-        if (posicion == jugadores.length - 1) {
-            return;
-        }
-        // agregar en la posicion actual vacia
-        jugadores[posicion] = jugador;
-        posicion++;
+    public int getPosicion() {
+        return posicion;
     }
 
 }
