@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
+import javax.swing.JFileChooser;
+
 
 /**
  *
@@ -84,6 +86,25 @@ public class ControlVentana implements ActionListener {
             ventana.setVisible(false);
             ventana.dispose();
             System.exit(0);
+        }
+    }
+
+    public void obtenerArchivoPropiedades(){
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas","properties");
+        int resultado = fileChooser.showOpenDialog(null);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            // llamar metodo de logica para pasar el archivo al modelo
+        }
+        
+    }
+    
+    public void obtenerArchivoSerializador(){
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado","bin");
+        int resultado = fileChooser.showOpenDialog(null);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            // llamar metodo de logica para pasar el archivo al modelo
         }
     }
 
