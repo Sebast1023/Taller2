@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package udistrital.avanzada.taller2.control;
 
 import java.util.ArrayList;
@@ -72,20 +68,24 @@ public class ControlEquipo {
     public void cambiarOrdenEquipos() {
         Collections.shuffle(this.equipos);
     }
+
     /**
      * Método para obtener los jugadores de un equipo
+     *
      * @param equipo
-     * @return 
+     * @return
      */
-    public Jugador[] obtenerJugadores(Equipo equipo){
+    public Jugador[] obtenerJugadores(Equipo equipo) {
         return equipo.getJugadores();
     }
+
     /**
      * Método para obtener nombre del equipo
+     *
      * @param equipo
-     * @return 
+     * @return
      */
-    public String obtenerNombreEquipo(Equipo equipo){
+    public String obtenerNombreEquipo(Equipo equipo) {
         return equipo.getNombre();
     }
 
@@ -96,5 +96,4 @@ public class ControlEquipo {
     public void setEquipos(ArrayList<Equipo> equipos) {
         this.equipos = equipos;
     }
-
 }
