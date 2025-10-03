@@ -2,9 +2,11 @@ package udistrital.avanzada.taller2.vista;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.JFileChooser;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 /**
  *
@@ -252,5 +254,19 @@ public class Ventana extends JFrame {
     // metodo para mostrar en la consola
     public void mostrarEnConsola(String mensaje) {
         System.out.println(mensaje);
+    }
+
+    /**
+    * metodo para obtener la instancia de JFileChooser con la cual se escogeran
+    * archivos de precarga
+    * @return retorna un JFileChooser
+    */
+    public JFileChooser obtenerFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        //Carpeta donde se guardan archivos de precarga y poscarga
+        File archivo = new File("Specs/data");
+        // Que se abra en la carpeta data predeterminadamente
+        fileChooser.setCurrentDirectory(carpetaInicial);
+        return fileChooser;
     }
 }
