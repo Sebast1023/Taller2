@@ -2,6 +2,7 @@ package udistrital.avanzada.taller2.vista;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -267,6 +268,25 @@ public class Ventana extends JFrame {
         File archivo = new File("Specs/data");
         // Que se abra en la carpeta data predeterminadamente
         fileChooser.setCurrentDirectory(carpetaInicial);
+        return fileChooser;
+    }
+    
+    /**
+    * metodo sobrecargado para obtener la instancia de JFileChooser con la cual se escogeran
+    * archivos de precarga con un filtro
+    * @param descripcion el mensaje que aparecera en el Chooser
+    * @param extension la extension de los archivos permitidos
+    * @return retorna un JFileChooser
+    */
+    public JFileChooser obtenerFileChooser(String descripcion, String extension) {
+        JFileChooser fileChooser = new JFileChooser();
+        //Carpeta donde se guardan archivos de precarga y poscarga
+        File archivo = new File("Specs/data");
+        // Que se abra en la carpeta data predeterminadamente
+        fileChooser.setCurrentDirectory(carpetaInicial);
+        // Filtro con el mensaje que aparecera y la extension del mismo
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(descripcion, extension);
+        fileChooser.setFileFilter(filtro);
         return fileChooser;
     }
 }
