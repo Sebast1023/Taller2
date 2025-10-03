@@ -16,15 +16,14 @@ import udistrital.avanzada.taller2.vista.Ventana;
  * @since 30/09/2025
  */
 public class ControlPrincipal {
-
-    Ventana ventana;
+    private ControlVentana controlVentana;
     private ControlEquipo controlEquipo;
     private ControlTiro controlTiro;
     private ArrayList<Equipo> empatados;
     
 
     public ControlPrincipal() {
-        this.ventana = new Ventana();
+        this.controlVentana = new ControlVentana(this);
         this.controlEquipo = new ControlEquipo();   
         this.controlTiro = new ControlTiro();
     }
