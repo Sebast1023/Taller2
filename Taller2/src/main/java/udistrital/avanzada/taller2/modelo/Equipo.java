@@ -48,6 +48,10 @@ public class Equipo implements Serializable {
         jugadores[posicion] = jugador;
         posicion++;
     }
+    
+    public void agregarPuntos(int puntos){
+        this.puntaje += puntos;
+    }
 
     public String getNombre() {
         return nombre;
