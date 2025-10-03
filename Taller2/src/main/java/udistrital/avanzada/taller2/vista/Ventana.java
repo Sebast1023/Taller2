@@ -248,4 +248,9 @@ public class Ventana extends JFrame {
     public void mostrarMensajeEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
+    
+    // metodo para mostrar en la consola
+    public void mostrarEnConsola(String mensaje) {
+        System.out.println(mensaje);
+    }
 }
