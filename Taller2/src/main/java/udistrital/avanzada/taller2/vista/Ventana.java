@@ -1,38 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package udistrital.avanzada.taller2.vista;
 
-import javax.swing.JFrame;
-
-/**
- *
- * @author 
- * @since 30/09/2025
- */
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
 
+/**
+ *
+ * @author Diego
+ * @version 1.2
+ * @since 03/10/2025
+ * @modificacion Se eliminó el label duplicado de nombre de equipo y se usó el
+ * TitledBorder para mostrarlo directamente. Se mejoró el diseño visual de
+ * puntajes, jugadores y botones.
+ */
 public class Ventana extends JFrame {
 
     // Paneles principales
     private JPanel panelTitulo;
-    private JPanel panelEquipos;
     private JPanel panelBotones;
     private JPanel panelCentro;
+
+    // Paneles de Equipos
+    private JPanel panelEquipoA;
+    private JPanel panelEquipoB;
 
     // Botones
     public JButton btnLanzar;
     public JButton btnNuevaRonda;
     public JButton btnSalir;
 
-    // Etiquetas de equipos
-    public JLabel lblEquipoA;
-    public JLabel lblEquipoB;
+    // Etiquetas de puntajes
     public JLabel lblPuntajeA;
     public JLabel lblPuntajeB;
 
@@ -57,12 +56,12 @@ public class Ventana extends JFrame {
         super.frameInit();
         setLayout(new BorderLayout(10, 10));
 
-        // ===== Panel título =====
+        // ===== Panel título global =====
         panelTitulo = new JPanel();
         panelTitulo.setBackground(new Color(210, 180, 140)); // café claro
         JLabel texto = new JLabel("🎯 Juego de la Argolla 🎯", JLabel.CENTER);
-        texto.setFont(new Font("Serif", Font.BOLD, 28));
-        texto.setForeground(new Color(80, 40, 20));
+        texto.setFont(new Font("Serif", Font.BOLD, 32));
+        texto.setForeground(new Color(60, 30, 10));
         panelTitulo.add(texto);
 
         // ===== Panel centro con equipos y mensajes =====
@@ -70,23 +69,29 @@ public class Ventana extends JFrame {
         panelCentro.setBackground(new Color(245, 245, 245));
         panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Panel Equipo A
-        JPanel panelA = crearPanelEquipo("Equipo A", new Color(139, 69, 19));
-        lblEquipoA = new JLabel("Equipo A");
-        lblPuntajeA = new JLabel("Puntaje: 0");
-        panelA.add(lblEquipoA);
-        panelA.add(lblPuntajeA);
+        // Panel Equipo A (nombre en el borde, puntaje abajo)
+        panelEquipoA = crearPanelEquipo("Equipo A", new Color(139, 69, 19));
+        lblPuntajeA = new JLabel("Puntaje: 0", JLabel.CENTER);
+        lblPuntajeA.setFont(new Font("SansSerif", Font.BOLD, 16));
+        lblPuntajeA.setForeground(new Color(139, 69, 19));
+        panelEquipoA.add(lblPuntajeA);
 
-        // Panel Equipo B
-        JPanel panelB = crearPanelEquipo("Equipo B", new Color(0, 100, 0));
-        lblEquipoB = new JLabel("Equipo B");
-        lblPuntajeB = new JLabel("Puntaje: 0");
-        panelB.add(lblEquipoB);
-        panelB.add(lblPuntajeB);
+        panelEquipoB = crearPanelEquipo("Equipo B", new Color(0, 100, 0));
+        lblPuntajeB = new JLabel("Puntaje: 0", JLabel.CENTER);
+        lblPuntajeB.setFont(new Font("SansSerif", Font.BOLD, 16));
+        lblPuntajeB.setForeground(new Color(0, 100, 0));
+        panelEquipoB.add(lblPuntajeB);
 
         // ===== Panel mensajes en el centro =====
         JPanel panelMensajes = new JPanel(new BorderLayout());
-        panelMensajes.setBorder(BorderFactory.createTitledBorder("Resultados del Juego"));
+        panelMensajes.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 2),
+                "Resultados del Juego",
+                TitledBorder.CENTER,
+                TitledBorder.TOP,
+                new Font("SansSerif", Font.BOLD, 16),
+                Color.DARK_GRAY
+        ));
         areaMensajes = new JTextArea(15, 30);
         areaMensajes.setEditable(false);
         areaMensajes.setFont(new Font("Monospaced", Font.PLAIN, 14));
@@ -94,16 +99,16 @@ public class Ventana extends JFrame {
         panelMensajes.add(scroll, BorderLayout.CENTER);
 
         // Añadir al centro
-        panelCentro.add(panelA);
+        panelCentro.add(panelEquipoA);
         panelCentro.add(panelMensajes);
-        panelCentro.add(panelB);
+        panelCentro.add(panelEquipoB);
 
         // ===== Panel botones =====
         panelBotones = new JPanel(new BorderLayout());
 
-        btnSalir = new JButton("❌ Salir");
-        btnLanzar = new JButton("🎲 Lanzar Argolla");
-        btnNuevaRonda = new JButton("🔄 Nueva Ronda");
+        btnSalir = crearBoton("❌ Salir", new Color(178, 34, 34));
+        btnLanzar = crearBoton("🎲 Lanzar Argolla", new Color(70, 130, 180));
+        btnNuevaRonda = crearBoton("🔄 Nueva Ronda", new Color(34, 139, 34));
 
         btnSalir.setActionCommand("Salir");
         btnLanzar.setActionCommand("Lanzar");
@@ -119,9 +124,13 @@ public class Ventana extends JFrame {
         this.add(panelBotones, BorderLayout.SOUTH);
 
         // Evento cierre
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
-                System.exit(0);
+                JOptionPane.showMessageDialog(null,
+                        "Usa el botón 'Salir' para cerrar el juego.",
+                        "Información",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -133,30 +142,35 @@ public class Ventana extends JFrame {
         JPanel panelEquipo = new JPanel();
         panelEquipo.setLayout(new BoxLayout(panelEquipo, BoxLayout.Y_AXIS));
         panelEquipo.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(colorBorde, 2, true),
+                BorderFactory.createLineBorder(colorBorde, 3, true),
                 titulo,
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
-                new Font("SansSerif", Font.BOLD, 18),
+                new Font("SansSerif", Font.BOLD, 20),
                 colorBorde
         ));
         panelEquipo.setBackground(new Color(255, 250, 240));
 
         // Espacios para 4 jugadores
-        JPanel contenedorJugadores = new JPanel(new GridLayout(4, 1, 5, 5));
+        JPanel contenedorJugadores = new JPanel(new GridLayout(4, 1, 8, 8));
         contenedorJugadores.setBackground(new Color(255, 250, 240));
 
         JLabel[] fotos = new JLabel[4];
         JLabel[] nombres = new JLabel[4];
 
         for (int i = 0; i < 4; i++) {
-            JPanel jugadorPanel = new JPanel(new BorderLayout());
-            jugadorPanel.setBackground(new Color(255, 250, 240));
+            JPanel jugadorPanel = new JPanel(new BorderLayout(5, 5));
+            jugadorPanel.setBackground(new Color(255, 255, 255));
+            jugadorPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
 
-            fotos[i] = new JLabel("[Foto]", JLabel.CENTER);
-            fotos[i].setPreferredSize(new Dimension(80, 60));
+            fotos[i] = new JLabel("📷", JLabel.CENTER);
+            fotos[i].setPreferredSize(new Dimension(80, 80));
+            fotos[i].setOpaque(true);
+            fotos[i].setBackground(new Color(230, 230, 230));
+            fotos[i].setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 
             nombres[i] = new JLabel("Jugador " + (i + 1), JLabel.CENTER);
+            nombres[i].setFont(new Font("SansSerif", Font.PLAIN, 14));
 
             jugadorPanel.add(fotos[i], BorderLayout.CENTER);
             jugadorPanel.add(nombres[i], BorderLayout.SOUTH);
@@ -177,11 +191,61 @@ public class Ventana extends JFrame {
 
         return panelEquipo;
     }
-    
-    public void mensajeEmergente(Component componente, String mensaje){
-        JOptionPane.showMessageDialog(componente, "Se inicia una nueva ronda.");
+
+    /**
+     * Actualiza el título del panel del equipo A (TitledBorder).
+     */
+    public void setTituloEquipoA(String titulo) {
+        if (panelEquipoA != null && panelEquipoA.getBorder() instanceof TitledBorder) {
+            TitledBorder tb = (TitledBorder) panelEquipoA.getBorder();
+            tb.setTitle(titulo);
+            panelEquipoA.repaint();
+            panelEquipoA.revalidate();
+        }
     }
-    public void mostrarMensajeEmergente(String mensaje){
-        JOptionPane.showMessageDialog(this, "Se inicia una nueva ronda.");
+
+    /**
+     * Actualiza el título del panel del equipo B (TitledBorder).
+     */
+    public void setTituloEquipoB(String titulo) {
+        if (panelEquipoB != null && panelEquipoB.getBorder() instanceof TitledBorder) {
+            TitledBorder tb = (TitledBorder) panelEquipoB.getBorder();
+            tb.setTitle(titulo);
+            panelEquipoB.repaint();
+            panelEquipoB.revalidate();
+        }
+    }
+
+    /**
+     * Crea botones estilizados
+     */
+    private JButton crearBoton(String texto, Color colorFondo) {
+        JButton boton = new JButton(texto);
+        boton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        boton.setBackground(colorFondo);
+        boton.setForeground(Color.WHITE);
+        boton.setFocusPainted(false);
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Efecto hover
+        boton.addChangeListener(e -> {
+            if (boton.getModel().isRollover()) {
+                boton.setBackground(colorFondo.darker());
+            } else {
+                boton.setBackground(colorFondo);
+            }
+        });
+
+        return boton;
+    }
+
+    // Métodos para mensajes emergentes
+    public void mensajeEmergente(Component componente, String mensaje) {
+        JOptionPane.showMessageDialog(componente, mensaje);
+    }
+
+    public void mostrarMensajeEmergente(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
     }
 }
