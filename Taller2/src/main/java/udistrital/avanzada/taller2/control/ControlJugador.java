@@ -63,7 +63,7 @@ public class ControlJugador {
         int tamano = jugadores.length;
         String[] apodos = new String[tamano];
         for (int i = 0; i < jugadores.length; i++) {
-            nombres[i] = jugadores[i].getApodo();
+            apodos[i] = jugadores[i].getApodo();
         }
         return apodos;
     }

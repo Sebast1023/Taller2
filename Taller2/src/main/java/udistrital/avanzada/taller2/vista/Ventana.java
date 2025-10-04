@@ -265,7 +265,7 @@ public class Ventana extends JFrame {
     public JFileChooser obtenerFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         //Carpeta donde se guardan archivos de precarga y poscarga
-        File archivo = new File("Specs/data");
+        File carpetaInicial = new File("Specs/data");
         // Que se abra en la carpeta data predeterminadamente
         fileChooser.setCurrentDirectory(carpetaInicial);
         return fileChooser;
@@ -281,7 +281,7 @@ public class Ventana extends JFrame {
     public JFileChooser obtenerFileChooser(String descripcion, String extension) {
         JFileChooser fileChooser = new JFileChooser();
         //Carpeta donde se guardan archivos de precarga y poscarga
-        File archivo = new File("Specs/data");
+        File carpetaInicial = new File("Specs/data");
         // Que se abra en la carpeta data predeterminadamente
         fileChooser.setCurrentDirectory(carpetaInicial);
         // Filtro con el mensaje que aparecera y la extension del mismo
