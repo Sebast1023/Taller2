@@ -2,6 +2,7 @@ package udistrital.avanzada.taller2.control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
