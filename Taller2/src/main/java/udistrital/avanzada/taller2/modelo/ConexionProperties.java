@@ -1,3 +1,4 @@
+package udistrital.avanzada.taller2.modelo;
 
 import java.io.*;
 import java.util.Properties;

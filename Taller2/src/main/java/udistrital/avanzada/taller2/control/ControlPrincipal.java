@@ -44,6 +44,18 @@ public class ControlPrincipal {
 
     private void iniciarJuego() {
         // por implementar: flujo de partida
+
+        //se pueden usar para guardar los resultados en el archivo aleatorio:
+        
+//        controlConexion.guardarResultado(equipo1, resultado1);
+//        controlConexion.guardarResultado(equipo2, resultado2);
+
+        //leer y mostrar lo que hay en el archivo aleatorio
+        
+//        List<String> resultados = controlConexion.obtenerResultados();
+//        for (String r : resultados) {
+//            System.out.println("Registro: " + r);
+//        }
     }
 
     /**

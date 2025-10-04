@@ -2,18 +2,20 @@ package udistrital.avanzada.taller2.control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import udistrital.avanzada.taller2.modelo.ConexionAleatoria;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 
 /**
- * Clase ControlConexion.
- * Descripción: Esta clase se encargará de la conexión con los diferentes archivos,
- * por ahora implementa la lectura del archivo configuracion.properties y carga
- * equipos/jugadores y tiros/puntajes en los controladores que se le inyecten.
+ * Clase ControlConexion. Descripción: Esta clase se encargará de la conexión
+ * con los diferentes archivos, por ahora implementa la lectura del archivo
+ * configuracion.properties y carga equipos/jugadores y tiros/puntajes en los
+ * controladores que se le inyecten.
  *
  * NOTA: por la especificación del taller, el .properties debe estar en:
- *   Specs/data/configuracion.properties
+ * Specs/data/configuracion.properties
  *
  * @author Diego
  * @version 1.0
@@ -23,23 +25,43 @@ public class ControlConexion {
 
     private ControlEquipo controlEquipo;
     private ControlTiro controlTiro;
+    private ConexionAleatoria aleatoria;
 
-    /** Ruta por defecto */
+    /**
+     * Ruta por defecto para configuracion
+     */
     private String rutaPorDefecto = "Specs/data/configuracion.properties";
+
+    /**
+     * Ruta por defecto para resultados
+     */
+    private String rutaResultados = "Specs/data/resultados.data";
+
+    /**
+     * contador interno de registros (clave)
+     */
+    private int contadorClaves = 1;
 
     public ControlConexion(ControlEquipo controlEquipo, ControlTiro controlTiro) {
         this.controlEquipo = controlEquipo;
         this.controlTiro = controlTiro;
+        try {
+            this.aleatoria = new ConexionAleatoria(rutaResultados);
+        } catch (IOException ex) {
+            System.err.println("ControlConexion - no se pudo abrir archivo aleatorio: " + ex.getMessage());
+        }
     }
 
-    /** Carga usando la ruta por defecto */
+    /**
+     * Carga usando la ruta por defecto
+     */
     public boolean cargarDesdeArchivo() {
         return cargarDesdeArchivo(rutaPorDefecto);
     }
 
     /**
-     * Carga la configuración desde un archivo .properties dado.
-     * Rellena controlEquipo y controlTiro con los datos leídos.
+     * Carga la configuración desde un archivo .properties dado. Rellena
+     * controlEquipo y controlTiro con los datos leídos.
      *
      * @param rutaArchivo ruta al archivo properties
      * @return true si la carga fue exitosa, false en caso de error
@@ -79,6 +101,58 @@ public class ControlConexion {
             return false;
         }
     }
+
+    /**
+     * Guarda el resultado de un equipo en el archivo aleatorio.
+     *
+     * @param equipo 
+     * @param resultado
+     */
+    public void guardarResultado(Equipo equipo, String resultado) {
+        if (aleatoria == null) {
+            return;
+        }
+        try {
+            // Construir arreglo de jugadores
+            String[] jugadores = new String[4];
+            for (int i = 0; i < 4; i++) {
+                jugadores[i] = equipo.getJugadores()[i].getNombre();
+            }
+
+            // Escribir con longitud fija
+            aleatoria.escribirRegistro(contadorClaves++, equipo.getNombre(), jugadores, resultado);
+        } catch (IOException ex) {
+            System.err.println("ControlConexion - error guardando resultado: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Lee todos los resultados del archivo aleatorio.
+     *
+     * @return Lista de cadenas con los registros guardados
+     */
+    public List<String> obtenerResultados() {
+        if (aleatoria == null) {
+            return java.util.Collections.emptyList();
+        }
+        try {
+            return aleatoria.leerRegistros();
+        } catch (IOException ex) {
+            System.err.println("ControlConexion - error leyendo resultados: " + ex.getMessage());
+            return java.util.Collections.emptyList();
+        }
+    }
+
+    /**
+     * Cierra la conexión con el archivo aleatorio.
+     */
+    public void cerrar() {
+        try {
+            if (aleatoria != null) {
+                aleatoria.cerrar();
+            }
+        } catch (IOException ex) {
+            System.err.println("ControlConexion - error cerrando archivo aleatorio: " + ex.getMessage());
+        }
+    }
 }
-
-
