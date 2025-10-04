@@ -105,4 +105,83 @@ public class ControlEquipo {
     public void setEquipos(ArrayList<Equipo> equipos) {
         this.equipos = equipos;
     }
+
+    public int obtenerTamaño() {
+        return equipos.size();
+    }
+
+    /**
+     * Método para obtener puntaje de equipo
+     *
+     * @param indice
+     * @return puntaje de equipo
+     */
+    public int getPuntajeEquipo(int indice) {
+        return equipos.get(indice).getPuntaje();
+    }
+
+    /**
+     * Método para sumar puntaje a equipo
+     *
+     * @param indice posicion del equipo
+     * @param puntaje
+     * @return puntaje actual despues de operacion
+     */
+    public int agregarPuntos(int indice, int puntaje) {
+        return equipos.get(indice).agregarPuntos(puntaje);
+    }
+
+    /**
+     * Método para obtener un jugador de un equipo con el indice
+     *
+     * @param indiceEquipo
+     * @param indiceJugador
+     * @return
+     */
+    public Jugador obtenerJugador(int indiceEquipo, int indiceJugador) {
+        return equipos.get(indiceEquipo).getJugador(indiceJugador);
+    }
+
+    /**
+     * Método para obtener nombre y apodo de un jugador
+     *
+     * @param indiceEquipo
+     * @param indiceJugador
+     * @return Vector de Strings con dos elementos primer elemento nombre y
+     * segundo el apodo
+     */
+    public String[] obtenerNombresJugador(int indiceEquipo, int indiceJugador) {
+
+        String[] aux = {"", ""};
+        aux[0] = equipos.get(indiceEquipo).getNombreJugador(indiceEquipo);
+        aux[1] = equipos.get(indiceEquipo).getApodoJugador(indiceEquipo);
+        return aux;
+    }
+
+    /**
+     * Método sobre cargado para obtener nombre del equipo con indice
+     *
+     * @param indice
+     * @return
+     */
+    public String obtenerNombreEquipo(int indice) {
+        return equipos.get(indice).getNombre();
+    }
+
+    /**
+     * Método para resetear los puntajes de los equipos a cero
+     */
+    public void resetearPuntaje() {
+        for (Equipo equipo : equipos) {
+            equipo.resetearPuntaje();
+        }
+    }
+
+    /**
+     * Metodo para vaciar lista de equipos
+     */
+    public void borrarTodo() {
+        equipos.clear();
+    }
+    
 }

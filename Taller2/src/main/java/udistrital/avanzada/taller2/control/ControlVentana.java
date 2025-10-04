@@ -89,6 +89,9 @@ public class ControlVentana implements ActionListener {
         }
     }
 
+    /**
+     * metodo para que el usuario eliga el archivo de precargar .Properties
+     */
     public void obtenerArchivoPropiedades() {
         JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas", "properties");
         int resultado = fileChooser.showOpenDialog(null);
@@ -96,10 +99,12 @@ public class ControlVentana implements ActionListener {
             File archivoSeleccionado = fileChooser.getSelectedFile();
             logica.cargarArchivoProperties(archivoSeleccionado);
         }
-        
 
     }
 
+    /**
+     * metodo para que el usuario eliga el archivo de precargar .bin
+     */
     public void obtenerArchivoSerializador() {
         JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado", "bin");
         int resultado = fileChooser.showOpenDialog(null);
@@ -109,17 +114,46 @@ public class ControlVentana implements ActionListener {
         }
     }
 
+    /**
+     * Metodo para mostrar mensaje en consola
+     *
+     * @param mensaje
+     */
     public void mostrarMensajeEnConsola(String mensaje) {
         ventana.mostrarEnConsola(mensaje);
+    }
+
+    /**
+     * Metodo para mostrar mensaje en ventana emergente
+     *
+     * @param mensaje
+     */
+    public void mostraMensajeEmergente(String mensaje) {
+        ventana.mostrarMensajeEmergente(mensaje);
+    }
+
+    /**
+     * Metodo que cambia el action command del boton lanzar a modo empate
+     */
+    public void activarModoLanzarEmpate() {
+        ventana.btnLanzar.setActionCommand("LanzarEmpate");
+    }
+
+    /**
+     * Metodo que cambia el action command del boton lanzar a modo normal
+     */
+    public void activarModolanzar() {
+        ventana.btnLanzar.setActionCommand("Lanzar");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
-                
+
         switch (comando) {
             case "Lanzar":
                 lanzarArgolla();
+                //logica.lanzarArgolla();                
                 break;
             case "NuevaRonda":
                 nuevaRonda();
@@ -133,9 +167,12 @@ public class ControlVentana implements ActionListener {
             case "ObtenerSerializable":
                 obtenerArchivoSerializador();
                 break;
+            case "LanzarEmpate":
+                logica.lanzarArgollaEmpate();
+                break;
             default:
                 break;
         }
-               
+
     }
 }

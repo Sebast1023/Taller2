@@ -44,9 +44,10 @@ public class Equipo implements Serializable {
         jugadores[posicion] = jugador;
         posicion++;
     }
-    
-    public void agregarPuntos(int puntos){
+
+    public int agregarPuntos(int puntos) {
         this.puntaje += puntos;
+        return puntaje;
     }
 
     public String getNombre() {
@@ -71,6 +72,49 @@ public class Equipo implements Serializable {
 
     public int getPosicion() {
         return posicion;
+    }
+
+    /**
+     * Metodo para retornar un jugador del vector de jugadores
+     *
+     * @param indice
+     * @return Jugador si no null
+     */
+    public Jugador getJugador(int indice) {
+        if (indice > 4 || indice < 0) {
+            return null;
+        }
+        return jugadores[indice];
+    }
+
+    /**
+     * Metodo para retornar nombre de un jugador
+     *
+     * @param indice
+     * @return nombre si no null
+     */
+    public String getNombreJugador(int indice) {
+        if (indice > 4 || indice < 0) {
+            return null;
+        }
+        return jugadores[indice].getNombre();
+    }
+
+    /**
+     * Metodo para retornar apodo de un jugador
+     *
+     * @param indice
+     * @return apodo si no null
+     */
+    public String getApodoJugador(int indice) {
+        if (indice > 4 || indice < 0) {
+            return null;
+        }
+        return jugadores[indice].getApodo();
+    }
+
+    public void resetearPuntaje() {
+        this.puntaje = 0;
     }
 
 }

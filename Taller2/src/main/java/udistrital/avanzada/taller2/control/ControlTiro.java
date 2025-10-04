@@ -16,11 +16,12 @@ public class ControlTiro {
     public ControlTiro() {
         this.tiros = new ArrayList<Tiro>();
     }
-    
+
     /**
      * Crea un tiro y lo agrega a lista de tiros
+     *
      * @param nombre
-     * @param puntaje 
+     * @param puntaje
      */
     public void crearTiro(String nombre, int puntaje) {
         // crear el tiro
@@ -53,5 +54,32 @@ public class ControlTiro {
         Tiro aux;
         aux = tiros.get(indice);
         return aux;
+    }
+
+    /**
+     * Metodo para obtener nombre de un tiro por indice
+     *
+     * @param indice
+     * @return cadena nombre
+     */
+    public String getNombreTiro(int indice) {
+        return tiros.get(indice).getNombre();
+    }
+
+    /**
+     * Metodo para obtener nombre de un tiro por indice
+     *
+     * @param indice
+     * @return entero puntos
+     */
+    public int getPuntajeTiro(int indice) {
+        return tiros.get(indice).getPuntos();
+    }
+
+    /**
+     * Metodo para vaciar lista de puntajes
+     */
+    public void borrarTodo() {
+        tiros.clear();
     }
 }
