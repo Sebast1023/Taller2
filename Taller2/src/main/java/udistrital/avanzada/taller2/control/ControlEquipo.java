@@ -89,6 +89,15 @@ public class ControlEquipo {
         return equipo.getNombre();
     }
 
+    /**
+     * Método para agregar un equipo a la lista de equipos
+     *
+     * @param equipo
+     */
+    public void agregarEquipo(Equipo equipo) {
+        equipos.add(equipo);
+    }
+
     public ArrayList<Equipo> getEquipos() {
         return equipos;
     }

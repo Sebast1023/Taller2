@@ -9,7 +9,6 @@ import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
 
-
 /**
  *
  * @author Diego
@@ -90,35 +89,53 @@ public class ControlVentana implements ActionListener {
         }
     }
 
-    public void obtenerArchivoPropiedades(){
-        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas","properties");
+    public void obtenerArchivoPropiedades() {
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas", "properties");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            // llamar metodo de logica para pasar el archivo al modelo
+            logica.cargarArchivoProperties(archivoSeleccionado);
         }
         
+
     }
-    
-    public void obtenerArchivoSerializador(){
-        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado","bin");
+
+    public void obtenerArchivoSerializador() {
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado", "bin");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            // llamar metodo de logica para pasar el archivo al modelo
+            logica.cargarArchivoSerilizable(archivoSeleccionado);
         }
+    }
+
+    public void mostrarMensajeEnConsola(String mensaje) {
+        ventana.mostrarEnConsola(mensaje);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if ("Lanzar".equals(e.getActionCommand())) {
-            lanzarArgolla();
+        String comando = e.getActionCommand();
+                
+        switch (comando) {
+            case "Lanzar":
+                lanzarArgolla();
+                break;
+            case "NuevaRonda":
+                nuevaRonda();
+                break;
+            case "Salir":
+                salir();
+                break;
+            case "ObtenerProperties":
+                obtenerArchivoPropiedades();
+                break;
+            case "ObtenerSerializable":
+                obtenerArchivoSerializador();
+                break;
+            default:
+                break;
         }
-        if ("NuevaRonda".equals(e.getActionCommand())) {
-            nuevaRonda();
-        }
-        if ("Salir".equals(e.getActionCommand())) {
-            salir();
-        }
+               
     }
 }

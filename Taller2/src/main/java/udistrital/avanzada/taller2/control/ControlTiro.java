@@ -16,7 +16,12 @@ public class ControlTiro {
     public ControlTiro() {
         this.tiros = new ArrayList<Tiro>();
     }
-
+    
+    /**
+     * Crea un tiro y lo agrega a lista de tiros
+     * @param nombre
+     * @param puntaje 
+     */
     public void crearTiro(String nombre, int puntaje) {
         // crear el tiro
         Tiro aux;
@@ -38,7 +43,7 @@ public class ControlTiro {
      * Método para obtener un tiro de la lista por su posicion de lista
      *
      * @param indice posicion del elemento en la lista
-     * @return
+     * @return Tiro si esta fuera de rango null
      */
     public Tiro getTiro(int indice) {
         // Si el indice esta fuera de la lista retornar null
