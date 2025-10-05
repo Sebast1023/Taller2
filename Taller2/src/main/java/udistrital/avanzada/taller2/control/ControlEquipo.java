@@ -23,12 +23,27 @@ public class ControlEquipo {
      * Método que crear un equipo y devuelve referencia del objeto
      *
      * @param nombre
-     * @return
+     * @return equipo creado
      */
     public Equipo crearEquipo(String nombre) {
         Equipo aux = new Equipo();
         aux.setNombre(nombre);
-        this.equipos.add(aux);
+        return aux;
+    }
+
+    /**
+     * Método que crear un equipo y añadirlo a la lista de equipos
+     *
+     * @param nombre
+     * @param bandera True si se quiere añadir el equipo a la lista
+     * @return equipo creado
+     */
+    public Equipo crearEquipo(String nombre, boolean bandera) {
+        Equipo aux = new Equipo();
+        aux.setNombre(nombre);
+        if (bandera) {
+            this.equipos.add(aux);
+        }
         return aux;
     }
 
@@ -105,8 +120,13 @@ public class ControlEquipo {
     public void setEquipos(ArrayList<Equipo> equipos) {
         this.equipos = equipos;
     }
-
-    public int obtenerTamaño() {
+    
+    /**
+     * Metodo para obtener tamaño de lista de equipos
+     * 
+     * @return numero de elementos de equipos
+     */
+    public int getTamaño() {
         return equipos.size();
     }
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Clase Jugador.java representa a los jugadores del juego Sus instancias seran
- * agrupadas en equipos de a 4. Implementa Serializable para que sea serializado 
+ * agrupadas en equipos de a 4. Implementa Serializable para que sea serializado
  * cuando se serializen las listas de equipos
  *
  * @author Mauricio
@@ -15,7 +15,7 @@ public class Jugador implements Serializable {
 
     private String nombre;
     private String apodo;
-    
+
     /**
      * Constructor con los parametros
      *
@@ -42,5 +42,10 @@ public class Jugador implements Serializable {
     public void setApodo(String apodo) {
         this.apodo = apodo;
     }
-    
+
+    @Override
+    public String toString() {
+        String aux = nombre + " " + apodo;
+        return aux;
+    }
 }

@@ -37,7 +37,7 @@ public class Equipo implements Serializable {
      */
     public void agregarJugador(Jugador jugador) {
         // No se agrega jugador si ya hay 4
-        if (posicion == jugadores.length - 1) {
+        if (posicion == jugadores.length+1) {
             return;
         }
         // Agregar en la posicion actual vacia
@@ -117,4 +117,14 @@ public class Equipo implements Serializable {
         this.puntaje = 0;
     }
 
+    @Override
+    public String toString() {
+        String aux = nombre + "[\n";
+        for (Jugador jugador : jugadores) {
+            if (jugador == null) {continue;}
+            aux += jugador.toString()+",\n";
+        }
+        aux += "]";
+        return aux;
+    }
 }

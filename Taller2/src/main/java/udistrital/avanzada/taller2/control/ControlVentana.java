@@ -3,11 +3,11 @@ package udistrital.avanzada.taller2.control;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
+import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
 
 /**
  *
@@ -15,13 +15,16 @@ import javax.swing.JFileChooser;
  * @version 1.1
  * @since 30/09/2025
  */
+
 public class ControlVentana implements ActionListener {
 
     private ControlPrincipal logica;
     private Ventana ventana;
+    private ArchivoSeleccionado archivosSeleccionados;
 
     public ControlVentana(ControlPrincipal controlPrincipal) {
         this.logica = controlPrincipal;
+        this.archivosSeleccionados = new ArchivoSeleccionado();
         ventana = new Ventana("Juego de la Argolla");
 
         // registrar listeners
@@ -74,44 +77,42 @@ public class ControlVentana implements ActionListener {
     }
 
     private void salir() {
-        int opcion = JOptionPane.showConfirmDialog(
-                ventana,
-                "¿Seguro que deseas salir del juego?",
-                "Confirmar salida",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        if (opcion == JOptionPane.YES_OPTION) {
-            ventana.setVisible(false);
-            ventana.dispose();
-            System.exit(0);
-        }
+        ventana.setVisible(false);
+        ventana.dispose();
+        System.exit(0);
     }
 
     /**
-     * metodo para que el usuario eliga el archivo de precargar .Properties
+     * Metodo para que el usuario eliga el archivo de precargar .Properties
      */
     public void obtenerArchivoPropiedades() {
         JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas", "properties");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            logica.cargarArchivoProperties(archivoSeleccionado);
+            archivosSeleccionados.setArchivoProperties(archivoSeleccionado);
         }
-
+        
     }
 
     /**
-     * metodo para que el usuario eliga el archivo de precargar .bin
+     * Metodo para que el usuario eliga el archivo de precargar .bin
      */
     public void obtenerArchivoSerializador() {
         JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado", "bin");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            logica.cargarArchivoSerilizable(archivoSeleccionado);
+            archivosSeleccionados.setArchivoProperties(archivoSeleccionado);
         }
+    }
+    /**
+     * Metodo para cargar Archivos
+     */
+    
+    public void cargarArchivos() {
+        int cargarDesde = 1;
+        logica.cargarArchivosPrecarga(archivosSeleccionados.getArchivoProperties(),archivosSeleccionados.getArchivoBin(),cargarDesde);
     }
 
     /**
@@ -145,6 +146,14 @@ public class ControlVentana implements ActionListener {
     public void activarModolanzar() {
         ventana.btnLanzar.setActionCommand("Lanzar");
     }
+    
+    /**
+     * Metodo para mostrar el menu de seleccion de varios archivos
+     * el de elegir properties y serializador
+     */
+    public void mostrarMenuArchivos() {
+        //TODO implementar
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -159,6 +168,7 @@ public class ControlVentana implements ActionListener {
                 nuevaRonda();
                 break;
             case "Salir":
+                logica.salir();
                 salir();
                 break;
             case "ObtenerProperties":
