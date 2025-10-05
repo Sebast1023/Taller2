@@ -3,7 +3,6 @@ package udistrital.avanzada.taller2.control;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
-import udistrital.avanzada.taller2.modelo.Equipo;
 
 /**
  * Logica de negocio
@@ -59,12 +58,9 @@ public class ControlPrincipal {
         // Si hay un archivo serializado de equipos en Specs/data entonces mostrar
         // menu de archivos para cargar los dos archivos solicitados .Properties y .bin
         // y escoga desde donde quiere carga la informacion de los equipos
-        if (controlConexion.existeArchivoSerializadoEquipos()) {
+        if (controlConexion.existeArchivoSerializadoEquipos()) {                       
             controlVentana.mostrarMenuArchivos();
         }
-        // Prueba cargar archivo properties
-        controlVentana.obtenerArchivoPropiedades();
-        
     }
 
     private void iniciarJuego() {
@@ -76,6 +72,7 @@ public class ControlPrincipal {
         if (partidasJugadas == partidasMaximas) {
             return;
         }
+        controlVentana.activarModolanzar();
         // resetear turnos 
         this.jugadorTurnoActual = 0;
         this.equipoTurnoActual = 0;
@@ -101,7 +98,9 @@ public class ControlPrincipal {
         int puntaje = controlTiro.getPuntajeTiro(numeroAleatorio);
         // sumar a equipo
         int puntajeEquipoActual = controlEquipo.agregarPuntos(equipoTurnoActual, puntaje);
-
+        
+        controlVentana.setPuntajeEquipo(equipoTurnoActual, puntaje);
+        
         if (puntajeEquipoActual > maximoPuntajeActual) {
             maximoPuntajeActual = puntajeEquipoActual;
         }
@@ -126,32 +125,33 @@ public class ControlPrincipal {
         //Proximo turno        
         int turnoMaxEquip = controlEquipo.getTamaño() - 1;
         int turnoMaxJugador = 3;
+        
+        controlVentana.desResaltarJugador(equipoTurnoActual, jugadorTurnoActual);
         // verificamos si estamos en el ultimo turno de la ronda
         if (jugadorTurnoActual == turnoMaxJugador && equipoTurnoActual == turnoMaxEquip) {
             // Si algun equipo logro 21 o más mirar si hay empate
             if (maximoPuntajeActual >= 21) {
                 empate();
             } else {
-                // reiniciar turnos para que todos lanzen de nuevo
+                // reiniciar turnos para que todos lanzen de nuevo                
                 this.equipoTurnoActual = 0;
                 this.jugadorTurnoActual = 0;
+                controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
             }
             return;
         }
         // si todavia hay gente con turno en el equipo pasar al siguiente
         if (jugadorTurnoActual < turnoMaxJugador) {
-            // TODO desresalatar jugador anterior
-            jugadorTurnoActual += 1;
-            // TODO resaltar nuevo jugador
-        } else {
-            // Estamos en el ultimo turno del equipo
-            // pasar turno a siguiente equipo
-            equipoTurnoActual += 1;
-            // Reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
-            // TODO desresalatar jugador anterior
-            jugadorTurnoActual = 0;
-            // TODO resaltar nuevo jugador
+            jugadorTurnoActual += 1;            
+            return;
         }
+        // Estamos en el ultimo turno del equipo
+        // pasar turno a siguiente equipo
+        equipoTurnoActual += 1;
+        // Reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
+        jugadorTurnoActual = 0;
+        controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);        
+        
     }
 
     public void lanzarArgollaEmpate() {
@@ -195,7 +195,8 @@ public class ControlPrincipal {
         );
 
         // Verificar si se termino la ronda de empate
-        if (equipoTurnoActual == empatados.size() - 1) {
+        controlVentana.desResaltarJugador(equipoTurnoActual, jugadorTurnoActual);
+        if (equipoTurnoActual == empatados.size() - 1) {            
             // Quitamos equipos que no tenga el maximo puntaje
             empatados.removeIf(e -> controlEquipo.getPuntajeEquipo(e) < maximoPuntajeActual);
             // verificar si hay empate otra vez
@@ -205,20 +206,8 @@ public class ControlPrincipal {
         // pasar el turno al siguiente equipo
         if (equipoTurnoActual < empatados.size() - 1) {
             equipoTurnoActual += 1;
+            controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
         }
-    }
-
-    /**
-     * Carga los nombres de equipos y jugadores en la vista
-     */
-    private void iniciarEquipos() {
-        ArrayList<Equipo> equipos = controlEquipo.getEquipos();
-
-        Equipo equipoA = equipos.get(0);
-        Equipo equipoB = equipos.get(1);
-
-        // delegamos la actualización a ControlVentana
-        controlVentana.actualizarEquipos(equipoA, equipoB);
     }
 
     private void empate() {
@@ -230,9 +219,10 @@ public class ControlPrincipal {
         jugadorTurnoActual = 0;
         equipoTurnoActual = 0;
         // Si hay empate jugar hasta desempate
-        if (empatados.size() > 1) {
+        if (empatados.size() > 1) {            
             //Cambiar el actionCommand del boton lanzar a LanzarEmpate
-            //controlVentana.activarModoLanzarEmpate();
+            controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
+            controlVentana.activarModoLanzarEmpate();
             return;
         }
         // TODO Si no hay empate entonces mostrar equipo ganador
@@ -274,7 +264,6 @@ public class ControlPrincipal {
         // Si el serializador no existe cargar todo desde properties
         if (serializado == null && origen == 1) {
             controlConexion.cargarArchivoProperties(propiedades, true);
-            return;
         } else {
             // Se deben cargar los equipos desde serializador
             controlConexion.cargarArchivoProperties(propiedades, false);
@@ -282,18 +271,28 @@ public class ControlPrincipal {
         }
         // Verificamos si podemos iniciar juego
         if (controlEquipo.getTamaño() >= 2 && controlTiro.getTamaño() >= 2) {
-            // Enviar a pantalla de juego
+            controlVentana.mostrarEquipos();
+            for (int i = 0; i < controlEquipo.getTamaño(); i++) {
+                String nombre = controlEquipo.obtenerNombreEquipo(i);
+                String[] nombres = controlJugador.obtenerNombresJugadores(controlEquipo.obtenerJugadores(i));
+                String[] apodos = controlJugador.obtenerApodosJugadores(controlEquipo.obtenerJugadores(i));
+                controlVentana.AgregarEquipo(nombre, nombres, apodos);
+            }
+            controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
         } else {
             // Resetear lista equipos y puntajes
             controlEquipo.borrarTodo();
             controlTiro.borrarTodo();
-            // Enviar mensaje no emergente de que el archivo no cumple con lo requerido para arrancar el juego
+            controlVentana.mostrarMensajeArchivo("Carge archivos con datos validos");
         }
 
     }
     
     public void salir() {
         // Guardamos equipos antes de salir del juego
-        controlConexion.serializarEquipos(controlEquipo.getEquipos());
+        if (controlEquipo.getTamaño() > 0) {
+            controlConexion.serializarEquipos(controlEquipo.getEquipos());
+        }        
     }
+    
 }

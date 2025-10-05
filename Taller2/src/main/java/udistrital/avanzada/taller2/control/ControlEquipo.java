@@ -93,6 +93,16 @@ public class ControlEquipo {
     public Jugador[] obtenerJugadores(Equipo equipo) {
         return equipo.getJugadores();
     }
+    
+    /**
+     * Método para obtener los jugadores de un equipo
+     *
+     * @param indice
+     * @return
+     */
+    public Jugador[] obtenerJugadores(int indice) {
+        return equipos.get(indice).getJugadores();
+    }
 
     /**
      * Método para obtener nombre del equipo
@@ -202,6 +212,10 @@ public class ControlEquipo {
      */
     public void borrarTodo() {
         equipos.clear();
+    }
+    
+    public Equipo getEquipo(int indice) {
+        return equipos.get(indice);
     }
     
 }
