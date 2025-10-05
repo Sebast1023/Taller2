@@ -31,21 +31,23 @@ public class Equipo implements Serializable {
     }
 
     /**
-     * Metodo para agregar jugador al array de jugadores
-     *
+     * Método para agregar un jugador al equipo.
      * @param jugador
+     * 
+     * @modificacion Diego (03/10/2025): Se corrigió la condición para permitir
+     * agregar los 4 jugadores.
      */
     public void agregarJugador(Jugador jugador) {
-        // No se agrega jugador si ya hay 4
-        if (posicion == jugadores.length - 1) {
+        if (jugador == null) {
             return;
         }
-        // Agregar en la posicion actual vacia
-        jugadores[posicion] = jugador;
-        posicion++;
+        if (posicion >= jugadores.length) {
+            return;
+        }
+        jugadores[posicion++] = jugador;
     }
-    
-    public void agregarPuntos(int puntos){
+
+    public void agregarPuntos(int puntos) {
         this.puntaje += puntos;
     }
 

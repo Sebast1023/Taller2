@@ -5,6 +5,7 @@ import java.util.Random;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
+import udistrital.avanzada.taller2.modelo.Tiro;
 
 /**
  * Logica de negocio
@@ -67,16 +68,23 @@ public class ControlPrincipal {
     }
 
     /**
-     * Método para obtener numero random
-     *
-     * @param limite
-     * @return
+     * Simula y devuelve un Tiro aleatorio usando ControlTiro. Retorna null si
+     * no hay tipos de tiro cargados.
+     * @return 
      */
-    private int obtenerNumeroRandom(int limite) {
-        Random numAleatorio;
-        numAleatorio = new Random();
-        int numero = numAleatorio.nextInt(limite + 1);
-        return numero;
+    public Tiro simularLanzamiento() {
+        if (this.controlTiro == null || this.controlTiro.getTamaño() == 0) {
+            System.err.println("ControlPrincipal.simularLanzamiento: no hay tipos de tiro cargados.");
+            return null;
+        }
+        Random rnd = new Random();
+        int idx = rnd.nextInt(this.controlTiro.getTamaño());
+        return this.controlTiro.getTiro(idx);
+    }
+
+    // Permite que otros controladores accedan al ControlEquipo
+    public ControlEquipo getControlEquipo() {
+        return this.controlEquipo;
     }
 
 }
