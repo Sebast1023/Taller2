@@ -9,9 +9,9 @@ import udistrital.avanzada.taller2.modelo.Jugador;
  * @since 03/10/2025
  */
 public class ControlJugador {
-    
+
     /**
-     * Método para crear un jugador
+     * Método para crear un jugador implementa el metodo de la interfaz
      *
      * @param nombre
      * @param apodo
@@ -21,6 +21,7 @@ public class ControlJugador {
         Jugador aux = new Jugador(nombre, apodo);
         return aux;
     }
+
     /**
      * Método para obtener nombre de un jugador
      *
@@ -30,6 +31,7 @@ public class ControlJugador {
     public String obtenerNombreJugador(Jugador jugador) {
         return jugador.getNombre();
     }
+
     /**
      * Método para obtener apodo de un jugador
      *
@@ -39,6 +41,7 @@ public class ControlJugador {
     public String obtenerApodoJugador(Jugador jugador) {
         return jugador.getApodo();
     }
+
     /**
      * Método para obtener nombres de jugadores
      *
@@ -53,7 +56,8 @@ public class ControlJugador {
         }
         return nombres;
     }
-  /**
+
+    /**
      * Método para obtener apodos de jugadores
      *
      * @param jugadores

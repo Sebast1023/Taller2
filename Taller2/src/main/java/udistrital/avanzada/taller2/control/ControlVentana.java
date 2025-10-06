@@ -1,14 +1,13 @@
 package udistrital.avanzada.taller2.control;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JOptionPane;
-import udistrital.avanzada.taller2.modelo.Equipo;
-import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
-
+import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
+import udistrital.avanzada.taller2.vista.PanelEquipo;
 
 /**
  *
@@ -16,109 +15,202 @@ import javax.swing.JFileChooser;
  * @version 1.1
  * @since 30/09/2025
  */
+
 public class ControlVentana implements ActionListener {
 
     private ControlPrincipal logica;
     private Ventana ventana;
+    private ArchivoSeleccionado archivosSeleccionados;
 
     public ControlVentana(ControlPrincipal controlPrincipal) {
         this.logica = controlPrincipal;
+        this.archivosSeleccionados = new ArchivoSeleccionado();
         ventana = new Ventana("Juego de la Argolla");
 
         // registrar listeners
         ventana.btnLanzar.addActionListener(this);
         ventana.btnNuevaRonda.addActionListener(this);
         ventana.btnSalir.addActionListener(this);
-    }
-
-    public void actualizarEquipos(Equipo equipoA, Equipo equipoB) {
-        // Actualizar títulos de los paneles (TitledBorder)
-        ventana.setTituloEquipoA(equipoA.getNombre());
-        ventana.setTituloEquipoB(equipoB.getNombre());
-
-        // Opcional: actualizar puntajes (si quieres empezar en 0)
-        ventana.lblPuntajeA.setText("Puntaje: " + equipoA.getPuntaje());
-        ventana.lblPuntajeB.setText("Puntaje: " + equipoB.getPuntaje());
-
-        // Jugadores del Equipo A
-        Jugador[] jugadoresA = equipoA.getJugadores();
-        for (int i = 0; i < ventana.lblNombresA.length; i++) {
-            if (jugadoresA != null && i < jugadoresA.length && jugadoresA[i] != null) {
-                ventana.lblNombresA[i].setText(
-                        jugadoresA[i].getNombre() + " (" + jugadoresA[i].getApodo() + ")"
-                );
-            } else {
-                ventana.lblNombresA[i].setText("Jugador " + (i + 1));
-            }
-        }
-
-        // Jugadores del Equipo B
-        Jugador[] jugadoresB = equipoB.getJugadores();
-        for (int i = 0; i < ventana.lblNombresB.length; i++) {
-            if (jugadoresB != null && i < jugadoresB.length && jugadoresB[i] != null) {
-                ventana.lblNombresB[i].setText(
-                        jugadoresB[i].getNombre() + " (" + jugadoresB[i].getApodo() + ")"
-                );
-            } else {
-                ventana.lblNombresB[i].setText("Jugador " + (i + 1));
-            }
-        }
+        ventana.btnArchivoBin.addActionListener(this);
+        ventana.btnArchivoProperties.addActionListener(this);
+        ventana.btnCargarArchivos.addActionListener(this);
+        ventana.btnTerminar.addActionListener(this);
     }
 
     private void lanzarArgolla() {
         ventana.areaMensajes.append(">> Lanzamiento realizado...\n");
     }
 
-    private void nuevaRonda() {
-        ventana.mostrarMensajeEmergente("Se inicia una nueva ronda.");
+    private void nuevaRonda() {        
         ventana.areaMensajes.setText("");
     }
 
     private void salir() {
-        int opcion = JOptionPane.showConfirmDialog(
-                ventana,
-                "¿Seguro que deseas salir del juego?",
-                "Confirmar salida",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        if (opcion == JOptionPane.YES_OPTION) {
-            ventana.setVisible(false);
-            ventana.dispose();
-            System.exit(0);
-        }
+        ventana.setVisible(false);
+        ventana.dispose();
+        System.exit(0);
     }
 
-    public void obtenerArchivoPropiedades(){
-        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas","properties");
+    /**
+     * Metodo para que el usuario eliga el archivo de precargar .Properties
+     */
+    public void obtenerArchivoPropiedades() {
+        ventana.mostrarMensajeArchivo("");
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo de propiedas", "properties");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            // llamar metodo de logica para pasar el archivo al modelo
+            archivosSeleccionados.setArchivoProperties(archivoSeleccionado);
+            ventana.setNombreArchivoProp(archivoSeleccionado.getName());
         }
         
     }
-    
-    public void obtenerArchivoSerializador(){
-        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado","bin");
+
+    /**
+     * Metodo para que el usuario eliga el archivo de precargar .bin
+     */
+    public void obtenerArchivoSerializador() {
+        ventana.mostrarMensajeArchivo("");
+        JFileChooser fileChooser = ventana.obtenerFileChooser("Archivo serializado", "bin");
         int resultado = fileChooser.showOpenDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
-            // llamar metodo de logica para pasar el archivo al modelo
+            archivosSeleccionados.setArchivoBin(archivoSeleccionado);
+            ventana.setNombreArchivoBin(archivoSeleccionado.getName());
         }
     }
+    /**
+     * Metodo para cargar Archivos
+     */
+    
+    public void cargarArchivos() {
+        if (archivosSeleccionados.getArchivoProperties() == null) {
+            ventana.mostrarMensajeArchivo("¡Necesario escoger archivo properties!");
+            return;
+        }
+        String opcion = ventana.getSeleccionOrigenCarga();
+        // Opcion cargar desde propiedades predeterminadamente cargarDesde es 1
+        int cargarDesde = 1;
+        // Si es desde Serializado entonces cargarDesde es 2
+        if (opcion.toLowerCase().equalsIgnoreCase("Serializado")) {
+            cargarDesde = 2;
+        }
+        
+        if (cargarDesde == 2 && archivosSeleccionados.getArchivoBin() == null) {
+            ventana.mostrarMensajeArchivo("¡Necesario escoger archivo serializado si quiere cargar desde ahi!");
+            return;
+        }
+        
+        logica.cargarArchivosPrecarga(
+                archivosSeleccionados.getArchivoProperties(),
+                archivosSeleccionados.getArchivoBin(),
+                cargarDesde
+        );
+    }
 
+    /**
+     * Metodo para mostrar mensaje en consola
+     *
+     * @param mensaje
+     */
+    public void mostrarMensajeEnConsola(String mensaje) {
+        ventana.mostrarEnConsola(mensaje);
+    }
+
+    /**
+     * Metodo para mostrar mensaje en ventana emergente
+     *
+     * @param mensaje
+     */
+    public void mostraMensajeEmergente(String mensaje) {
+        ventana.mostrarMensajeEmergente(mensaje);
+    }
+    
+    /**
+     * Metodo para mostrar el menu de seleccion de varios archivos
+     * el de elegir properties y serializador
+     */
+    public void mostrarMenuArchivos() {
+        ventana.activarEleccionDeArchivoSerializado();
+    }
+    
+    public void mostrarMensajeArchivo(String mensaje) {
+        ventana.mostrarMensajeArchivo(mensaje);
+    }
+        
+    public void mostrarEquipos() {
+        ventana.mostrarEquipos();
+    }    
+    
+    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {        
+        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre);
+        for (int i = 0; i < nombres.length; i++) {
+            panelEquipo.agregarJugador(nombres[i], i);
+        }
+    }    
+    
+    public void resaltarJugador(int indiceEquipo, int indiceJugador) {
+        ventana.resaltarJugador(indiceEquipo, indiceJugador);
+    }
+    
+    public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
+        ventana.desResaltarJugador(indiceEquipo, indiceJugador);
+    }
+    
+    public void setPuntajeEquipo(int indiceEquipo, int puntaje) {
+        ventana.setPuntajeEquipo(indiceEquipo, puntaje);
+    }
+    
+    public void mostraMenuTerminar() {
+        ventana.mostrarBotonesTerminar();
+    }     
+    
+    public void mostraMenuSalir() {
+        ventana.mostrarBotonSalir();
+    }
+    
+    public void resetearPuntaje() {
+        Component[] aux = ventana.getPanelesEquipos();
+        for (Component component : aux) {
+            if (component instanceof PanelEquipo) {
+                ((PanelEquipo) component).cambiarPuntajeEquipo(0);
+            }     
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
-        if ("Lanzar".equals(e.getActionCommand())) {
-            lanzarArgolla();
+        String comando = e.getActionCommand();
+
+        switch (comando) {
+            case "Lanzar":
+                //lanzarArgolla();
+                logica.lanzar();                
+                break;
+            case "NuevaRonda":
+                resetearPuntaje();
+                ventana.mostrarBotonesJuego();
+                logica.nuevaMano();
+                break;
+            case "Salir":
+                logica.salir();
+                salir();
+                break;
+            case "ObtenerProperties":
+                obtenerArchivoPropiedades();
+                break;
+            case "ObtenerSerializable":
+                obtenerArchivoSerializador();
+                break;            
+            case "CargarArchivos":    
+                cargarArchivos();
+                break;
+            case "Terminar":    
+                ventana.mostrarBotonSalir();
+                break;
+            default:
+                break;
         }
-        if ("NuevaRonda".equals(e.getActionCommand())) {
-            nuevaRonda();
-        }
-        if ("Salir".equals(e.getActionCommand())) {
-            salir();
-        }
+
     }
 }
