@@ -92,7 +92,7 @@ public class ControlConexion {
             if (nombreEquipo == null) {
                 continue;
             }
-            Equipo equipo = controlEquipo.crearEquipo(nombreEquipo);
+            int equipo = controlEquipo.crearEquipo(nombreEquipo);
 
             // el requerimiento dice 4 jugadores/Equipo
             for (int j = 1; j <= 4; j++) {

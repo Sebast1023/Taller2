@@ -67,7 +67,7 @@ public class Equipo implements Serializable {
     }
 
     public Jugador[] getJugadores() {
-        return jugadores;
+        return Arrays.copyOf(jugadores, jugadores.length);;
     }
 
     public int getPosicion() {
@@ -81,7 +81,7 @@ public class Equipo implements Serializable {
      * @return Jugador si no null
      */
     public Jugador getJugador(int indice) {
-        if (indice > 4 || indice < 0) {
+        if (indice > jugadores.length || indice < 0) {
             return null;
         }
         return jugadores[indice];
@@ -94,7 +94,7 @@ public class Equipo implements Serializable {
      * @return nombre si no null
      */
     public String getNombreJugador(int indice) {
-        if (indice > 4 || indice < 0) {
+        if (indice > jugadores.length || indice < 0) {
             return null;
         }
         return jugadores[indice].getNombre();
@@ -107,7 +107,7 @@ public class Equipo implements Serializable {
      * @return apodo si no null
      */
     public String getApodoJugador(int indice) {
-        if (indice > 4 || indice < 0) {
+        if (indice > jugadores.length || indice < 0) {
             return null;
         }
         return jugadores[indice].getApodo();
@@ -115,6 +115,19 @@ public class Equipo implements Serializable {
 
     public void resetearPuntaje() {
         this.puntaje = 0;
+    }
+
+    /**
+     * Metodo para obtener nombres y apodos de los todos los jugadores
+     *
+     * @return array de string primero posicion con el array de nombre, seguda posicion con array de apodos
+     */
+    public String[][] getNombreApodoJugadores() {
+        String[][] nombres = new String[2][jugadores.length];
+        for(i = 0; i < jugadores.length; i++) {
+            nombres[0][i] = jugadores[i].getNombre();
+            nombres[1][i] = jugadores[i].getApodo();
+        }
     }
 
     @Override

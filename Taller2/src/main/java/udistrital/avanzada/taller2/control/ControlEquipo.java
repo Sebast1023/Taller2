@@ -20,68 +20,36 @@ public class ControlEquipo {
     }
 
     /**
-     * Método que crear un equipo y devuelve referencia del objeto
-     *
-     * @param nombre
-     * @return equipo creado
-     */
-    public Equipo crearEquipo(String nombre) {
-        Equipo aux = new Equipo();
-        aux.setNombre(nombre);
-        return aux;
-    }
-
-    /**
      * Método que crear un equipo y añadirlo a la lista de equipos
      *
      * @param nombre
-     * @param bandera True si se quiere añadir el equipo a la lista
      * @return equipo creado
      */
-    public Equipo crearEquipo(String nombre, boolean bandera) {
+    public int crearEquipo(String nombre) {
         Equipo aux = new Equipo();
         aux.setNombre(nombre);
-        if (bandera) {
-            this.equipos.add(aux);
-        }
-        return aux;
+        equipos.add(aux);
+        return equipos.indexOf(aux);
     }
 
     /**
      * Método para agregar un jugador a un equipo
      *
-     * @param equipo equipo donde se agrega el jugador
+     * @param indice equipo donde se agrega el jugador
      * @param jugador jugador a agregar
      */
-    public void agregarJugador(Equipo equipo, Jugador jugador) {
-        equipo.agregarJugador(jugador);
-    }
-
-    /**
-     * Método para agregar puntos al equipo
-     *
-     * @param equipo
-     * @param puntos
-     */
-    public void agregarPuntos(Equipo equipo, int puntos) {
-        equipo.agregarPuntos(puntos);
+    public void agregarJugador(int indice, Jugador jugador) {
+        equipos.get(indice).agregarJugador(jugador);
     }
 
     /**
      * Metodo para obtener puntaje de un equipo
      *
-     * @param equipo
+     * @param indice
      * @return
      */
-    public int obtenerPuntaje(Equipo equipo) {
-        return equipo.getPuntaje();
-    }
-
-    /**
-     * Método para cambiar el orden de los equipos
-     */
-    public void cambiarOrdenEquipos() {
-        Collections.shuffle(this.equipos);
+    public int obtenerPuntaje(int indice) {
+        return equipos.get(indice).getPuntaje();
     }
 
     /**
@@ -93,26 +61,6 @@ public class ControlEquipo {
     public Jugador[] obtenerJugadores(Equipo equipo) {
         return equipo.getJugadores();
     }
-    
-    /**
-     * Método para obtener los jugadores de un equipo
-     *
-     * @param indice
-     * @return
-     */
-    public Jugador[] obtenerJugadores(int indice) {
-        return equipos.get(indice).getJugadores();
-    }
-
-    /**
-     * Método para obtener nombre del equipo
-     *
-     * @param equipo
-     * @return
-     */
-    public String obtenerNombreEquipo(Equipo equipo) {
-        return equipo.getNombre();
-    }
 
     /**
      * Método para agregar un equipo a la lista de equipos
@@ -121,14 +69,6 @@ public class ControlEquipo {
      */
     public void agregarEquipo(Equipo equipo) {
         equipos.add(equipo);
-    }
-
-    public ArrayList<Equipo> getEquipos() {
-        return equipos;
-    }
-
-    public void setEquipos(ArrayList<Equipo> equipos) {
-        this.equipos = equipos;
     }
     
     /**
@@ -216,6 +156,10 @@ public class ControlEquipo {
     
     public Equipo getEquipo(int indice) {
         return equipos.get(indice);
+    }
+    
+    public String[][] getNombreApodoJugadores(int indice) {
+        return equipos.get(indice).getNombreApodoJugadores();
     }
     
 }

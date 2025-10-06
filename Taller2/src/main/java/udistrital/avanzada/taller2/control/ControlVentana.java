@@ -177,6 +177,10 @@ public class ControlVentana implements ActionListener {
             }     
         }
     }
+
+    public void modificarEquipo(int indice, String nombreEquipo, String[][] nombresApodos) {
+        //TODO llamar a metodo de actulizar equipo de ventana
+    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
