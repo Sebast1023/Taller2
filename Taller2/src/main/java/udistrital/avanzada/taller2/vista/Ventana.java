@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -67,7 +68,7 @@ public class Ventana extends JFrame {
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
         wrapper.add(panelEquipos);
-        
+
         panelEquipos.setAlignmentX(Component.LEFT_ALIGNMENT);
         wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -181,6 +182,21 @@ public class Ventana extends JFrame {
     // metodo para mostrar en la consola
     public void mostrarEnConsola(String mensaje) {
         System.out.println(mensaje);
+    }
+
+    /**
+     * Imprime en consola los resultados almacenados en el archivo aleatorio.
+     *
+     * @param resultados
+     */
+    public void mostrarResultadosEnConsola(List<String> resultados) {
+        System.out.println("\n====================================");
+        System.out.println("        RESULTADOS GUARDADOS        ");
+        System.out.println("====================================");
+        for (String registro : resultados) {
+            System.out.println(registro);
+        }
+        System.out.println("====================================\n");
     }
 
     /**

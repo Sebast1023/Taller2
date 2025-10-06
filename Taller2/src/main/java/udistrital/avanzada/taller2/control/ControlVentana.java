@@ -4,8 +4,10 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
 import udistrital.avanzada.taller2.vista.PanelEquipo;
 
@@ -15,7 +17,6 @@ import udistrital.avanzada.taller2.vista.PanelEquipo;
  * @version 1.1
  * @since 30/09/2025
  */
-
 public class ControlVentana implements ActionListener {
 
     private ControlPrincipal logica;
@@ -41,7 +42,7 @@ public class ControlVentana implements ActionListener {
         ventana.areaMensajes.append(">> Lanzamiento realizado...\n");
     }
 
-    private void nuevaRonda() {        
+    private void nuevaRonda() {
         ventana.areaMensajes.setText("");
     }
 
@@ -63,7 +64,7 @@ public class ControlVentana implements ActionListener {
             archivosSeleccionados.setArchivoProperties(archivoSeleccionado);
             ventana.setNombreArchivoProp(archivoSeleccionado.getName());
         }
-        
+
     }
 
     /**
@@ -79,10 +80,11 @@ public class ControlVentana implements ActionListener {
             ventana.setNombreArchivoBin(archivoSeleccionado.getName());
         }
     }
+
     /**
      * Metodo para cargar Archivos
      */
-    
+
     public void cargarArchivos() {
         if (archivosSeleccionados.getArchivoProperties() == null) {
             ventana.mostrarMensajeArchivo("¡Necesario escoger archivo properties!");
@@ -95,12 +97,12 @@ public class ControlVentana implements ActionListener {
         if (opcion.toLowerCase().equalsIgnoreCase("Serializado")) {
             cargarDesde = 2;
         }
-        
+
         if (cargarDesde == 2 && archivosSeleccionados.getArchivoBin() == null) {
             ventana.mostrarMensajeArchivo("¡Necesario escoger archivo serializado si quiere cargar desde ahi!");
             return;
         }
-        
+
         logica.cargarArchivosPrecarga(
                 archivosSeleccionados.getArchivoProperties(),
                 archivosSeleccionados.getArchivoBin(),
@@ -125,59 +127,73 @@ public class ControlVentana implements ActionListener {
     public void mostraMensajeEmergente(String mensaje) {
         ventana.mostrarMensajeEmergente(mensaje);
     }
-    
+
     /**
-     * Metodo para mostrar el menu de seleccion de varios archivos
-     * el de elegir properties y serializador
+     * Metodo para mostrar el menu de seleccion de varios archivos el de elegir
+     * properties y serializador
      */
     public void mostrarMenuArchivos() {
         ventana.activarEleccionDeArchivoSerializado();
     }
-    
+
     public void mostrarMensajeArchivo(String mensaje) {
         ventana.mostrarMensajeArchivo(mensaje);
     }
-        
+
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
-    }    
-    
-    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {        
+    }
+
+    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {
         PanelEquipo panelEquipo = ventana.agregarEquipo(nombre);
         for (int i = 0; i < nombres.length; i++) {
             panelEquipo.agregarJugador(nombres[i], i);
         }
-    }    
-    
+    }
+
     public void resaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.resaltarJugador(indiceEquipo, indiceJugador);
     }
-    
+
     public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.desResaltarJugador(indiceEquipo, indiceJugador);
     }
-    
+
     public void setPuntajeEquipo(int indiceEquipo, int puntaje) {
         ventana.setPuntajeEquipo(indiceEquipo, puntaje);
     }
-    
+
     public void mostraMenuTerminar() {
         ventana.mostrarBotonesTerminar();
-    }     
-    
+    }
+
     public void mostraMenuSalir() {
         ventana.mostrarBotonSalir();
     }
-    
+
     public void resetearPuntaje() {
         Component[] aux = ventana.getPanelesEquipos();
         for (Component component : aux) {
             if (component instanceof PanelEquipo) {
                 ((PanelEquipo) component).cambiarPuntajeEquipo(0);
-            }     
+            }
         }
     }
-    
+
+    /**
+ * Muestra un mensaje simple en consola desde la vista.
+ */
+public void mostrarMensajeConsola(String mensaje) {
+    ventana.mostrarEnConsola(mensaje);
+}
+
+/**
+ * Envía una lista de resultados a la vista para imprimirlos en consola.
+ */
+public void mostrarResultadosConsola(List<String> resultados) {
+    ventana.mostrarResultadosEnConsola(resultados);
+}
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -185,7 +201,7 @@ public class ControlVentana implements ActionListener {
         switch (comando) {
             case "Lanzar":
                 //lanzarArgolla();
-                logica.lanzar();                
+                logica.lanzar();
                 break;
             case "NuevaRonda":
                 resetearPuntaje();
@@ -201,11 +217,11 @@ public class ControlVentana implements ActionListener {
                 break;
             case "ObtenerSerializable":
                 obtenerArchivoSerializador();
-                break;            
-            case "CargarArchivos":    
+                break;
+            case "CargarArchivos":
                 cargarArchivos();
                 break;
-            case "Terminar":    
+            case "Terminar":
                 ventana.mostrarBotonSalir();
                 break;
             default:
