@@ -1,10 +1,9 @@
 package udistrital.avanzada.taller2.control;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import udistrital.avanzada.taller2.modelo.Equipo;
-import udistrital.avanzada.taller2.modelo.Jugador;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
 import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
@@ -35,14 +34,14 @@ public class ControlVentana implements ActionListener {
         ventana.btnArchivoBin.addActionListener(this);
         ventana.btnArchivoProperties.addActionListener(this);
         ventana.btnCargarArchivos.addActionListener(this);
+        ventana.btnTerminar.addActionListener(this);
     }
 
     private void lanzarArgolla() {
         ventana.areaMensajes.append(">> Lanzamiento realizado...\n");
     }
 
-    private void nuevaRonda() {
-        ventana.mostrarMensajeEmergente("Se inicia una nueva ronda.");
+    private void nuevaRonda() {        
         ventana.areaMensajes.setText("");
     }
 
@@ -126,20 +125,6 @@ public class ControlVentana implements ActionListener {
     public void mostraMensajeEmergente(String mensaje) {
         ventana.mostrarMensajeEmergente(mensaje);
     }
-
-    /**
-     * Metodo que cambia el action command del boton lanzar a modo empate
-     */
-    public void activarModoLanzarEmpate() {
-        ventana.btnLanzar.setActionCommand("LanzarEmpate");
-    }
-
-    /**
-     * Metodo que cambia el action command del boton lanzar a modo normal
-     */
-    public void activarModolanzar() {
-        ventana.btnLanzar.setActionCommand("Lanzar");
-    }
     
     /**
      * Metodo para mostrar el menu de seleccion de varios archivos
@@ -154,7 +139,7 @@ public class ControlVentana implements ActionListener {
     }
         
     public void mostrarEquipos() {
-        ventana.mostraEquipos();
+        ventana.mostrarEquipos();
     }    
     
     public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {        
@@ -176,6 +161,23 @@ public class ControlVentana implements ActionListener {
         ventana.setPuntajeEquipo(indiceEquipo, puntaje);
     }
     
+    public void mostraMenuTerminar() {
+        ventana.mostrarBotonesTerminar();
+    }     
+    
+    public void mostraMenuSalir() {
+        ventana.mostrarBotonSalir();
+    }
+    
+    public void resetearPuntaje() {
+        Component[] aux = ventana.getPanelesEquipos();
+        for (Component component : aux) {
+            if (component instanceof PanelEquipo) {
+                ((PanelEquipo) component).cambiarPuntajeEquipo(0);
+            }     
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -183,10 +185,12 @@ public class ControlVentana implements ActionListener {
         switch (comando) {
             case "Lanzar":
                 //lanzarArgolla();
-                logica.lanzarArgolla();                
+                logica.lanzar();                
                 break;
             case "NuevaRonda":
-                nuevaRonda();
+                resetearPuntaje();
+                ventana.mostrarBotonesJuego();
+                logica.nuevaMano();
                 break;
             case "Salir":
                 logica.salir();
@@ -197,12 +201,12 @@ public class ControlVentana implements ActionListener {
                 break;
             case "ObtenerSerializable":
                 obtenerArchivoSerializador();
-                break;
-            case "LanzarEmpate":
-                logica.lanzarArgollaEmpate();
-                break;
+                break;            
             case "CargarArchivos":    
                 cargarArchivos();
+                break;
+            case "Terminar":    
+                ventana.mostrarBotonSalir();
                 break;
             default:
                 break;

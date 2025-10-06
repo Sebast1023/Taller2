@@ -33,6 +33,8 @@ public class ControlPrincipal {
     private int partidasMaximas;
     // el puntaje mas alto sacado en la ejecucion del juego
     private int maximoPuntajeActual;
+    // el puntaje mas alto sacado en la ejecucion del juego
+    private boolean empate;
 
     ;
 
@@ -44,6 +46,7 @@ public class ControlPrincipal {
         this.partidasMaximas = 2;
         this.empatados = new ArrayList<>();
         this.maximoPuntajeActual = 0;
+        this.empate = false;
         // 
         this.jugadoresAnteriores = new ArrayList<>();
         // inicializar controladores base
@@ -54,17 +57,13 @@ public class ControlPrincipal {
         // crear conexion (inyección simple)
         this.controlConexion = new ControlConexion(controlEquipo, controlTiro, controlJugador);
         this.controlVentana = new ControlVentana(this);
-        
+
         // Si hay un archivo serializado de equipos en Specs/data entonces mostrar
         // menu de archivos para cargar los dos archivos solicitados .Properties y .bin
         // y escoga desde donde quiere carga la informacion de los equipos
-        if (controlConexion.existeArchivoSerializadoEquipos()) {                       
+        if (controlConexion.existeArchivoSerializadoEquipos()) {
             controlVentana.mostrarMenuArchivos();
         }
-    }
-
-    private void iniciarJuego() {
-        // por implementar: flujo de partida
     }
 
     public void nuevaMano() {
@@ -72,16 +71,19 @@ public class ControlPrincipal {
         if (partidasJugadas == partidasMaximas) {
             return;
         }
-        controlVentana.activarModolanzar();
-        // resetear turnos 
+        // empate falso para que suceda el lanzamiento normal
+        empate = false;        
+        // resetear variables auxiliares
         this.jugadorTurnoActual = 0;
-        this.equipoTurnoActual = 0;
+        this.equipoTurnoActual = 0;       
+        this.maximoPuntajeActual = 0;
         // resetear listas auxiliares para empate
         this.empatados.clear();
         this.jugadoresAnteriores.clear();
         // resetear puntaje de todos los equipos a cero
         controlEquipo.resetearPuntaje();
         //TODO actualizar vista para restear todos los puntjaes a cero
+        
         // Vaciar lista empatados 
         empatados.clear();
     }
@@ -98,35 +100,46 @@ public class ControlPrincipal {
         int puntaje = controlTiro.getPuntajeTiro(numeroAleatorio);
         // sumar a equipo
         int puntajeEquipoActual = controlEquipo.agregarPuntos(equipoTurnoActual, puntaje);
-        
-        controlVentana.setPuntajeEquipo(equipoTurnoActual, puntaje);
-        
-        if (puntajeEquipoActual > maximoPuntajeActual) {
-            maximoPuntajeActual = puntajeEquipoActual;
-        }
 
-        if (empatados.isEmpty()) {
-            empatados.add(equipoTurnoActual);
-        } else {
-            if (maximoPuntajeActual < puntajeEquipoActual) {
-                empatados.clear();
-                empatados.add(equipoTurnoActual);
-            } else if (maximoPuntajeActual == puntajeEquipoActual) {
-                empatados.add(equipoTurnoActual);
-            }
-        }
-        // TODO actualizar puntaje equipo en ventana puntajeActual
+        controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
 
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergente(jugador[0] + "-" + jugador[1]
-                + "hizo " + nombreTiro + " obteniendo " + puntaje + " puntos"
+        controlVentana.mostraMensajeEmergente(
+                jugador[0]
+                + "\n" 
+                + jugador[1]
+                + "\nhizo " 
+                + nombreTiro 
+                + " obteniendo " 
+                + puntaje 
+                + " puntos"
         );
 
         //Proximo turno        
         int turnoMaxEquip = controlEquipo.getTamaño() - 1;
         int turnoMaxJugador = 3;
-        
+
         controlVentana.desResaltarJugador(equipoTurnoActual, jugadorTurnoActual);
+
+        // Estamos en el ultimo turno del equipo        
+        if (jugadorTurnoActual == turnoMaxJugador) {
+            if (puntajeEquipoActual > maximoPuntajeActual) {
+                maximoPuntajeActual = puntajeEquipoActual;
+                empatados.clear();
+                empatados.add(equipoTurnoActual);
+            } else if (maximoPuntajeActual == puntajeEquipoActual) {
+                empatados.add(equipoTurnoActual);
+            }
+            
+        }
+        
+        // si todavia hay gente con turno en el equipo pasar al siguiente
+        if (jugadorTurnoActual < turnoMaxJugador) {
+            jugadorTurnoActual += 1;
+            controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
+            return;
+        }
+
         // verificamos si estamos en el ultimo turno de la ronda
         if (jugadorTurnoActual == turnoMaxJugador && equipoTurnoActual == turnoMaxEquip) {
             // Si algun equipo logro 21 o más mirar si hay empate
@@ -140,17 +153,11 @@ public class ControlPrincipal {
             }
             return;
         }
-        // si todavia hay gente con turno en el equipo pasar al siguiente
-        if (jugadorTurnoActual < turnoMaxJugador) {
-            jugadorTurnoActual += 1;            
-            return;
-        }
-        // Estamos en el ultimo turno del equipo
         // pasar turno a siguiente equipo
         equipoTurnoActual += 1;
         // Reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
         jugadorTurnoActual = 0;
-        controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);        
+        controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);       
         
     }
 
@@ -172,10 +179,11 @@ public class ControlPrincipal {
         } else {
             indiceJugador = obtenerNumeroRandom(4);
         }
+        controlVentana.resaltarJugador(indiceEquipoActual, indiceJugador);
 
         String[] jugador = controlEquipo.obtenerNombresJugador(indiceEquipoActual, indiceJugador);
         //Guardamos el inddice del jugador en el indice correspondiente
-        if (equipoTurnoActual < jugadoresAnteriores.size() && equipoTurnoActual >= 0) {
+        if (equipoTurnoActual < jugadoresAnteriores.size() && equipoTurnoActual > 0) {
             jugadoresAnteriores.set(equipoTurnoActual, indiceJugador);
         } else {
             jugadoresAnteriores.add(indiceJugador);
@@ -187,18 +195,37 @@ public class ControlPrincipal {
         int puntaje = controlTiro.getPuntajeTiro(numeroAleatorio);
         // sumar a equipo
         int puntajeEquipoActual = controlEquipo.agregarPuntos(indiceEquipoActual, puntaje);
-
-        // TODO actualizar puntaje equipo en ventana puntajeActual
+        
+        if (puntajeEquipoActual > maximoPuntajeActual) {
+            maximoPuntajeActual = puntajeEquipoActual;
+        }
+        
+        // Actualizar puntaje equipo en ventana puntajeActual
+        controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergente(jugador[0] + "-" + jugador[1]
-                + "hizo " + nombreTiro + " obteniendo " + puntaje + " puntos"
+        controlVentana.mostraMensajeEmergente(
+                jugador[0] 
+                + "\n" 
+                + jugador[1]
+                + "\nhizo " 
+                + nombreTiro 
+                + " obteniendo " 
+                + puntaje 
+                + " puntos"
         );
-
+        
+        controlVentana.desResaltarJugador(indiceEquipoActual, indiceJugador);
         // Verificar si se termino la ronda de empate
-        controlVentana.desResaltarJugador(equipoTurnoActual, jugadorTurnoActual);
-        if (equipoTurnoActual == empatados.size() - 1) {            
+        if (equipoTurnoActual == empatados.size() - 1) {
             // Quitamos equipos que no tenga el maximo puntaje
-            empatados.removeIf(e -> controlEquipo.getPuntajeEquipo(e) < maximoPuntajeActual);
+            ArrayList<Integer> nuevosEmpatados = new ArrayList<>();
+            for (int i = 0; i < empatados.size(); i++) {
+                if (controlEquipo.getPuntajeEquipo(i) == maximoPuntajeActual) {
+                    nuevosEmpatados.add(i);
+                    jugadoresAnteriores.remove(i);
+                }
+            }
+            empatados = nuevosEmpatados;
             // verificar si hay empate otra vez
             empate();
             return;
@@ -206,10 +233,18 @@ public class ControlPrincipal {
         // pasar el turno al siguiente equipo
         if (equipoTurnoActual < empatados.size() - 1) {
             equipoTurnoActual += 1;
-            controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
+            controlVentana.resaltarJugador(equipoTurnoActual, indiceJugador);
         }
     }
 
+    public void lanzar() {
+        if (true) {
+            lanzarArgolla();
+        } else {
+            lanzarArgollaEmpate();
+        }       
+    }
+    
     private void empate() {
         // No hay ni un ganador entonces salir de la funcion
         if (empatados.isEmpty()) {
@@ -219,19 +254,25 @@ public class ControlPrincipal {
         jugadorTurnoActual = 0;
         equipoTurnoActual = 0;
         // Si hay empate jugar hasta desempate
-        if (empatados.size() > 1) {            
+        if (empatados.size() > 1) {
+            controlVentana.mostraMensajeEmergente("Hay empate");
             //Cambiar el actionCommand del boton lanzar a LanzarEmpate
             controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
-            controlVentana.activarModoLanzarEmpate();
+            // activar modo de lanzamiento empate
+            empate = true;            
             return;
         }
         // TODO Si no hay empate entonces mostrar equipo ganador
-        // controlVentana.activarModoLanzarEmpate();
+        // TODO guardar info en archivo aleatorio
         this.partidasJugadas += 1;
-        if (partidasJugadas == partidasMaximas) {
-            //TODO mostar boton salir, ocultar boton de otra partida
-        } else {
-            //TODO mostrar boton terminar y otra partida
+        // activar modo para lanzamiento normal
+        empate = false;
+        if (partidasJugadas >= partidasMaximas) {
+            controlVentana.mostraMenuSalir();
+            //mostar boton salir, ocultar boton de otra partida            
+        } else {                        
+            //mostrar boton terminar y otra partida
+            controlVentana.mostraMenuTerminar();            
         }
     }
 
@@ -244,7 +285,7 @@ public class ControlPrincipal {
     private int obtenerNumeroRandom(int limite) {
         Random numAleatorio;
         numAleatorio = new Random();
-        int numero = numAleatorio.nextInt(limite + 1);
+        int numero = numAleatorio.nextInt(limite);
         return numero;
     }
 
@@ -287,12 +328,12 @@ public class ControlPrincipal {
         }
 
     }
-    
+
     public void salir() {
         // Guardamos equipos antes de salir del juego
         if (controlEquipo.getTamaño() > 0) {
             controlConexion.serializarEquipos(controlEquipo.getEquipos());
-        }        
+        }
     }
-    
+
 }

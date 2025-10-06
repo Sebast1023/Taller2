@@ -22,9 +22,10 @@ public class PanelJugador extends JPanel {
     public JLabel nombre;
 
     public PanelJugador(String nombres, int indice) {
-        JPanel jugadorPanel = new JPanel(new BorderLayout(5, 5));
-        jugadorPanel.setBackground(new Color(255, 255, 255));
-        jugadorPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        this.setLayout(new BorderLayout(5, 5));
+        this.setBackground(new Color(255, 255, 255));
+        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        this.setPreferredSize(new Dimension(120, 80));
 
         foto = new JLabel("📷", JLabel.CENTER);
         foto.setPreferredSize(new Dimension(80, 80));
@@ -32,19 +33,21 @@ public class PanelJugador extends JPanel {
         foto.setBackground(new Color(230, 230, 230));
         foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 
-        nombre = new JLabel("Jugador " + (indice + 1), JLabel.CENTER);
+        nombre = new JLabel(nombres + (indice + 1), JLabel.CENTER);
         nombre.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
-        jugadorPanel.add(foto, BorderLayout.CENTER);
-        jugadorPanel.add(nombre, BorderLayout.SOUTH);
+        this.add(foto, BorderLayout.CENTER);
+        this.add(nombre, BorderLayout.SOUTH);        
     }
 
     public void resaltar() {
         this.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+        this.repaint();
     }
 
     public void desResaltar() {
         this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        this.repaint();
     }
 
 }

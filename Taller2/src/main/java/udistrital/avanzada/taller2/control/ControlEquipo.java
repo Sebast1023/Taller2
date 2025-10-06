@@ -183,8 +183,8 @@ public class ControlEquipo {
     public String[] obtenerNombresJugador(int indiceEquipo, int indiceJugador) {
 
         String[] aux = {"", ""};
-        aux[0] = equipos.get(indiceEquipo).getNombreJugador(indiceEquipo);
-        aux[1] = equipos.get(indiceEquipo).getApodoJugador(indiceEquipo);
+        aux[0] = equipos.get(indiceEquipo).getNombreJugador(indiceJugador);
+        aux[1] = equipos.get(indiceEquipo).getApodoJugador(indiceJugador);
         return aux;
     }
 
