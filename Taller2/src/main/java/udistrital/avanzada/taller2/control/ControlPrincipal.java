@@ -333,17 +333,20 @@ public class ControlPrincipal {
         String nombre;
         String[][] nombres;
         int indice;
+        if (partidasJugadas == 0){
+            indice = 0;
+        } else {
+            indice = partidasJugadas;
+        }
         for (int i = 0; i < 2; i++) {
             if (partidasJugadas == 0) {
-                indice =  0;
                 nombre = controlEquipo.obtenerNombreEquipo(indice);
                 nombres = controlEquipo.getNombreApodoJugadores(indice);
             } else {
-                indice = partidasJugadas;
                 nombre = controlEquipo.obtenerNombreEquipo(partidasJugadas+1);
                 nombres = controlEquipo.getNombreApodoJugadores(partidasJugadas+1);
             }   
-            controlVentana.modificarEquipo(0, nombre, nombres);
+            controlVentana.modificarEquipo(i, nombre, nombres);
             indice += 1; 
         }
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
