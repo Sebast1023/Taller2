@@ -155,7 +155,7 @@ public class ControlPrincipal {
             return;
         }
         // pasar turno a siguiente equipo
-        equiposJugando[equipoTurnoActual] += 1;
+        equipoTurnoActual += 1;
         // Reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
         jugadorTurnoActual = 0;
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);       
