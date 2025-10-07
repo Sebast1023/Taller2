@@ -1,6 +1,7 @@
 package udistrital.avanzada.taller2.vista;
 
 import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -24,11 +25,20 @@ public class PanelJugador extends JPanel {
                 new EmptyBorder(8, 8, 8, 8)
         ));
 
-        foto = new JLabel("📷", JLabel.CENTER);
+        foto = new JLabel("", JLabel.CENTER);
         foto.setPreferredSize(new Dimension(100, 100));
         foto.setOpaque(true);
         foto.setBackground(new Color(240, 235, 220));
         foto.setBorder(BorderFactory.createLineBorder(new Color(180, 150, 100), 2, true));
+
+        try {
+            ImageIcon icono = new ImageIcon(getClass().getResource("/images/jugador.png"));
+            Image imagenEscalada = icono.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+            foto.setIcon(new ImageIcon(imagenEscalada));
+        } catch (Exception e) {
+            foto.setText("📷");
+            System.err.println("⚠️ No se encontró la imagen predeterminada: /images/jugador.png");
+        }
 
         nombre = new JLabel(nombres, JLabel.CENTER);
         nombre.setFont(new Font("SansSerif", Font.BOLD, 13));

@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
 import udistrital.avanzada.taller2.vista.PanelEquipo;
 
 /**
  * Clase encargada de la logica de la venta
- * 
+ *
  * @author Diego
  * @version 1.1
  * @since 30/09/2025
@@ -26,12 +27,12 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
     private ControlPrincipal logica;
     private Ventana ventana;
     private ArchivoSeleccionado archivosSeleccionados;
+
     /**
      * Contructor
-     * 
-     * @param controlPrincipal 
+     *
+     * @param controlPrincipal
      */
-    
     //Inyeccion de dependicias
     public ControlVentana(ControlPrincipal controlPrincipal) {
         this.logica = controlPrincipal;
@@ -48,14 +49,14 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
         ventana.btnCargarArchivos.addActionListener(this);
         ventana.btnTerminar.addActionListener(this);
     }
-    
+
     private void lanzarArgolla() {
         ventana.areaMensajes.append(">> Lanzamiento realizado...\n");
     }
 
     private void nuevaRonda() {
         ventana.areaMensajes.setText("");
-    }        
+    }
 
     /**
      * Metodo para que el usuario eliga el archivo de precargar .Properties
@@ -124,10 +125,10 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
     public void mostrarMensajeEnConsola(String mensaje) {
         ventana.mostrarEnConsola(mensaje);
     }
-    
+
     /**
-     * Metodo para mostrar mensaje de error en consola implementado 
-     * de la intrefaz ImpresorConsola
+     * Metodo para mostrar mensaje de error en consola implementado de la
+     * intrefaz ImpresorConsola
      *
      * @param mensaje
      */
@@ -142,16 +143,16 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      * @param mensaje
      */
     public void mostraMensajeEmergente(String mensaje) {
-            ventana.mostrarMensajeEmergente(mensaje);
+        ventana.mostrarMensajeEmergente(mensaje);
     }
-        
+
     /**
      * Metodo para mostrar mensaje en ventana emergente
      *
      * @param mensaje
      */
-    public void mostraMensajeEmergenteTiro(String mensaje) {        
-        ventana.mostrarMensajeEmergenteTiro(mensaje);          
+    public void mostraMensajeEmergenteTiro(String mensaje) {
+        ventana.mostrarMensajeEmergenteTiro(mensaje);
     }
 
     /**
@@ -161,31 +162,32 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
     public void mostrarMenuArchivos() {
         ventana.activarEleccionDeArchivoSerializado();
     }
-    
+
     /**
-     * Metodo para mostrar a usuario mensaje de error al cargar mal
-     * los archivos
-     * 
-     * @param mensaje 
+     * Metodo para mostrar a usuario mensaje de error al cargar mal los archivos
+     *
+     * @param mensaje
      */
     public void mostrarMensajeArchivo(String mensaje) {
         ventana.mostrarMensajeArchivo(mensaje);
     }
-    
+
     /**
      * Metodo para pasar de modo elegir archivos a modo juego
      */
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
-    }    
-    
+    }
+
     /**
      * Metodo para agregar un equipo a la interfaz gráfica
+     *
      * @param nombre nombre del equipo
-     * @param nombres matriz de strings con nombres poscion 0 y apodos en 1 de los jugadores
+     * @param nombres matriz de strings con nombres poscion 0 y apodos en 1 de
+     * los jugadores
      * @param equipo indica si es equipo A si se pasa 1 y B si se pasa 2
      */
-    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
+    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {
         // Creamos los colores segun corresponda
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
@@ -216,54 +218,54 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
             }
         }
     }
-    
+
     /**
      * Metodo para resaltar jugador que esta en su turno
-     * 
+     *
      * @param indiceEquipo
-     * @param indiceJugador 
+     * @param indiceJugador
      */
     public void resaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.resaltarJugador(indiceEquipo, indiceJugador);
     }
-    
+
     /**
      * Metodo para resaltar jugador que ya termnio su turno
-     * 
+     *
      * @param indiceEquipo
-     * @param indiceJugador 
+     * @param indiceJugador
      */
     public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.desResaltarJugador(indiceEquipo, indiceJugador);
     }
-    
+
     /**
      * Metodo para actualizar el puntaje de un equipo
-     * 
+     *
      * @param indiceEquipo
-     * @param puntaje 
+     * @param puntaje
      */
     public void setPuntajeEquipo(int indiceEquipo, int puntaje) {
         ventana.setPuntajeEquipo(indiceEquipo, puntaje);
     }
-    
+
     /**
      * Metodo para mostrar menu de otra ronda
      */
     public void mostraMenuTerminar() {
         ventana.mostrarBotonesTerminar();
     }
-    
+
     /**
      * Metodo para mostrar menu de salir
      */
     public void mostraMenuSalir() {
         ventana.mostrarBotonSalir();
     }
-    
+
     /**
-     * Metodo para resetear en la vista todos los puntajes a cero
-     * por jugar nueva mano
+     * Metodo para resetear en la vista todos los puntajes a cero por jugar
+     * nueva mano
      */
     public void resetearPuntaje() {
         ArrayList<PanelEquipo> paneles = (ArrayList<PanelEquipo>) ventana.getPanelesEquipos();
@@ -271,13 +273,14 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
             panel.cambiarPuntajeEquipo(0);
         }
     }
-    
+
     /**
      * Metodo para actualizar el panel Equipo y mostra el que se pase
-     * 
+     *
      * @param indice del panel a editar
-     * @param nombreEquipo 
-     * @param nombres matriz de string posicion 0 nombres y posicion 1 apodos de jugadores
+     * @param nombreEquipo
+     * @param nombres matriz de string posicion 0 nombres y posicion 1 apodos de
+     * jugadores
      */
     public void modificarEquipo(int indice, String nombreEquipo, String[][] nombres) {
         PanelEquipo panel = ventana.getPanelEquipo(indice);
@@ -286,34 +289,42 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
             panel.setDatosJugador(i, nombres[0][i], nombres[1][i]);
         }
     }
-    
+
     /**
-     * Método para imprimir restulados 
-     * 
+     * Método para imprimir restulados
+     *
      * @param resultados Un cadenade
      * @param titulo
      */
-    public void mostrarResultadosConsola(List<String> resultados, String titulo) {        
+    public void mostrarResultadosConsola(List<String> resultados, String titulo) {
         mostrarMensajeEnConsola("\n====================================");
-        mostrarMensajeEnConsola("        RESULTADOS "+titulo);
+        mostrarMensajeEnConsola("        RESULTADOS " + titulo);
         mostrarMensajeEnConsola("====================================");
         for (String registro : resultados) {
             mostrarMensajeEnConsola(registro);
         }
-        mostrarMensajeEnConsola("====================================\n");        
+        mostrarMensajeEnConsola("====================================\n");
     }
-    
+
     /**
      * Metodo para cerrar la aplicacion
      */
     @Override
     public void salir() {
-        logica.salir();
-        ventana.setVisible(false);
-        ventana.dispose();
-        System.exit(0);
+        int opcion = JOptionPane.showConfirmDialog(
+                ventana,
+                "¿Está seguro de que desea salir del juego?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            mostraMensajeEmergente("¡Gracias por jugar! 👋");
+            System.exit(0);
+        }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -328,7 +339,7 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
                 ventana.mostrarBotonesJuego();
                 logica.nuevaMano();
                 break;
-            case "Salir":                
+            case "Salir":
                 salir();
                 break;
             case "ObtenerProperties":

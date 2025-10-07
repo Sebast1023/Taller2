@@ -54,7 +54,8 @@ public class Ventana extends JFrame {
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent e) {
+                // La vista no pregunta, solo notifica al controlador
                 evl.salir();
             }
         });
@@ -128,7 +129,8 @@ public class Ventana extends JFrame {
         panelMensajes.add(scroll, BorderLayout.CENTER);
 
         // ===== Panel botones =====
-        panelBotones = new JPanel(new BorderLayout());
+        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(new Color(250, 245, 235)); // tono cálido como los demás
 
         btnSalir = crearBoton("❌ Salir", new Color(178, 34, 34));
         btnLanzar = crearBoton("🎲 Lanzar Argolla", new Color(70, 130, 180));
@@ -151,25 +153,38 @@ public class Ventana extends JFrame {
     }
 
     /**
-     * Crea botones estilizados
+     * Crea botones estilizados con bordes redondeados y efecto hover.
      */
     private JButton crearBoton(String texto, Color colorFondo) {
         JButton boton = new JButton(texto);
-        boton.setFont(new Font("SansSerif", Font.BOLD, 16));
-        boton.setBackground(colorFondo);
+        boton.setFont(new Font("SansSerif", Font.BOLD, 15));
         boton.setForeground(Color.WHITE);
+        boton.setBackground(colorFondo);
         boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        boton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(colorFondo.darker(), 2, true),
+                BorderFactory.createEmptyBorder(10, 25, 10, 25)
+        ));
         boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton.setOpaque(true);
 
-        // Efecto hover
-        boton.addChangeListener(e -> {
-            if (boton.getModel().isRollover()) {
+        // Efecto hover más visible
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
                 boton.setBackground(colorFondo.darker());
-            } else {
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
                 boton.setBackground(colorFondo);
             }
         });
+
+        // Efecto de sombra ligera
+        boton.setBorderPainted(true);
+        boton.setFocusPainted(false);
+        boton.setContentAreaFilled(true);
 
         return boton;
     }
