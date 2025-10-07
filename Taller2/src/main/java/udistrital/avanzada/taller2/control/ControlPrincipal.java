@@ -18,6 +18,7 @@ public class ControlPrincipal {
     private ControlEquipo controlEquipo;
     private ControlTiro controlTiro;
     private ControlConexion controlConexion;
+    private ControlArchivoAleatorio controlArchivoA;
     // empatados nos ayuda a saber que equipos estan empatados
     private ArrayList<Integer> empatados;
     // jugadoresAnteriores nos ayuda a saber quien jugo antes en una ronda de empate para que no se repita en la siguiente
@@ -54,10 +55,11 @@ public class ControlPrincipal {
         this.controlEquipo = new ControlEquipo();
         this.controlTiro = new ControlTiro();
         this.controlJugador = new ControlJugador();
-
+        
         // crear conexion (inyección simple)
         this.controlConexion = new ControlConexion(controlEquipo, controlTiro, controlJugador);
         this.controlVentana = new ControlVentana(this);
+        this.controlArchivoA = new ControlArchivoAleatorio(controlVentana);
 
         // Si hay un archivo serializado de equipos en Specs/data entonces mostrar
         // menu de archivos para cargar los dos archivos solicitados .Properties y .bin
@@ -273,8 +275,7 @@ public class ControlPrincipal {
             empate = true;
             return;
         }
-               // TODO Si no hay empate entonces mostrar equipo ganador
-        // TODO guardar info en archivo aleatorio
+        // TODO Si no hay empate entonces mostrar equipo ganador
         // ---------------------------------------------------------
         // Guardar resultados de la ronda en el archivo aleatorio:
         // Para cada equipo se grabará "GANÓ" si su puntaje == maximoPuntajeActual
@@ -283,12 +284,13 @@ public class ControlPrincipal {
             int totalEquipos = controlEquipo.getTamaño();
             for (int idx = 0; idx < totalEquipos; idx++) {
                 // obtener equipo por indice
-                udistrital.avanzada.taller2.modelo.Equipo eq = controlEquipo.getEquipos().get(idx);
+                String nombreEquipo = controlEquipo.getNombreEquipo(idx);
+                String[] nombresJugadores = controlEquipo.getNombreApodoJugadores(idx)[0];
                 String resultadoEquipo = (controlEquipo.getPuntajeEquipo(idx) == maximoPuntajeActual) ? "GANO" : "PERDIO";
-                controlConexion.guardarResultado(eq, resultadoEquipo);
+                controlArchivoA.guardarResultado(nombreEquipo, nombresJugadores, resultadoEquipo);
             }
         } catch (Exception ex) {
-            System.err.println("Error guardando resultados: " + ex.getMessage());
+            controlVentana.mostrarErrorEnConsola("Error guardando resultados: " + ex.getMessage());
         }
 
         // actualizar conteo de partidas y mostrar menús
@@ -355,8 +357,8 @@ public class ControlPrincipal {
             controlConexion.serializarEquipos(controlEquipo.getEquipos());
         }
         //Mostrar los datos del archivo aleatorio
-        List<String> resultados = controlConexion.obtenerResultados();
-        controlVentana.mostrarResultadosConsola(resultados);
+        List<String> resultados = controlArchivoA.obtenerResultados();
+        controlVentana.mostrarResultadosConsola(resultados,"GUARDADOS");
         controlConexion.cerrar();
         System.exit(0);
     }
@@ -372,11 +374,11 @@ public class ControlPrincipal {
         }
         for (int i = 0; i < 2; i++) {
             if (partidasJugadas == 0) {
-                nombre = controlEquipo.obtenerNombreEquipo(indice);
+                nombre = controlEquipo.getNombreEquipo(indice);
                 nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.AgregarEquipo(nombre, nombres, i);
             } else {
-                nombre = controlEquipo.obtenerNombreEquipo(indice);
+                nombre = controlEquipo.getNombreEquipo(indice);
                 nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.modificarEquipo(i, nombre, nombres);
             }            

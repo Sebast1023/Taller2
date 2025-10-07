@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
 import udistrital.avanzada.taller2.vista.PanelEquipo;
 
@@ -21,7 +20,7 @@ import udistrital.avanzada.taller2.vista.PanelEquipo;
  * @version 1.1
  * @since 30/09/2025
  */
-public class ControlVentana implements ActionListener {
+public class ControlVentana implements ActionListener, ImpresorConsola {
 
     private ControlPrincipal logica;
     private Ventana ventana;
@@ -88,7 +87,6 @@ public class ControlVentana implements ActionListener {
     /**
      * Metodo para cargar Archivos
      */
-
     public void cargarArchivos() {
         if (archivosSeleccionados.getArchivoProperties() == null) {
             ventana.mostrarMensajeArchivo("¡Necesario escoger archivo properties!");
@@ -115,12 +113,25 @@ public class ControlVentana implements ActionListener {
     }
 
     /**
-     * Metodo para mostrar mensaje en consola
+     * Metodo para mostrar mensaje en consola implementado de la intrefaz
+     * ImpresorConsola
      *
      * @param mensaje
      */
+    @Override
     public void mostrarMensajeEnConsola(String mensaje) {
         ventana.mostrarEnConsola(mensaje);
+    }
+    
+    /**
+     * Metodo para mostrar mensaje de error en consola implementado 
+     * de la intrefaz ImpresorConsola
+     *
+     * @param mensaje
+     */
+    @Override
+    public void mostrarErrorEnConsola(String mensaje) {
+        ventana.mostrarErrorEnConsola(mensaje);
     }
 
     /**
@@ -146,26 +157,19 @@ public class ControlVentana implements ActionListener {
 
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
-//<<<<<<< HEAD
-//    }
-//
-//    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {
-//        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre);
-//        for (int i = 0; i < nombres.length; i++) {
-//            panelEquipo.agregarJugador(nombres[i], i);
-    }    
-    
-    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
+    }
+
+    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
-        
-        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje);  
-        
-        ImageIcon imagenJugador = null;                
-        
+
+        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje);
+
+        ImageIcon imagenJugador = null;
+
         for (int i = 0; i < nombres[0].length; i++) {
             String nombreArchivo = (equipo == 1) ? "jugadorA" : "jugadorB";
-            nombreArchivo =+ (i + 1) + ".png";            
+            nombreArchivo = +(i + 1) + ".png";
             String ruta = "Specs/data/images/" + nombreArchivo;
             URL url = getClass().getClassLoader().getResource(ruta);
             if (url == null) {
@@ -176,11 +180,11 @@ public class ControlVentana implements ActionListener {
                 Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
                 imagenJugador = new ImageIcon(img);
             }
-            panelEquipo.agregarJugador(nombres[0][i],i);
-            
+            panelEquipo.agregarJugador(nombres[0][i], i);
+
             if (imagenJugador != null) {
                 panelEquipo.setFotoJugador(i, imagenJugador);
-            }            
+            }
         }
     }
 
@@ -218,21 +222,23 @@ public class ControlVentana implements ActionListener {
             panel.setDatosJugador(i, nombres[0][i], nombres[1][i]);
         }
     }
-
+    
     /**
- * Muestra un mensaje simple en consola desde la vista.
- */
-public void mostrarMensajeConsola(String mensaje) {
-    ventana.mostrarEnConsola(mensaje);
-}
-
-/**
- * Envía una lista de resultados a la vista para imprimirlos en consola.
- */
-public void mostrarResultadosConsola(List<String> resultados) {
-    ventana.mostrarResultadosEnConsola(resultados);
-}
-
+     * Método para imprimir restulados 
+     * 
+     * @param resultados Un cadenade
+     * @param titulo
+     */
+    public void mostrarResultadosConsola(List<String> resultados, String titulo) {        
+        mostrarMensajeEnConsola("\n====================================");
+        mostrarMensajeEnConsola("        RESULTADOS "+titulo);
+        mostrarMensajeEnConsola("====================================");
+        for (String registro : resultados) {
+            mostrarMensajeEnConsola(registro);
+        }
+        mostrarMensajeEnConsola("====================================\n");        
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
