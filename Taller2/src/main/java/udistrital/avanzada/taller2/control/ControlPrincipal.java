@@ -101,7 +101,6 @@ public class ControlPrincipal {
     }
 
     public void lanzarArgolla() {
-        System.out.println(equiposJugando[0] + " " + equiposJugando[1]);
         if (partidasJugadas >= partidasMaximas) {
             return;
         }
@@ -288,7 +287,6 @@ public class ControlPrincipal {
             int totalEquipos = equiposJugando.length;
             for (int idx = 0; idx < totalEquipos; idx++) {
                 // obtener equipo por indice
-                System.out.println("guardar");
                 String nombreEquipo = controlEquipo.getNombreEquipo(equiposJugando[idx]);
                 String[] nombresJugadores = controlEquipo.getNombreApodoJugadores(equiposJugando[idx])[0];
                 String resultadoEquipo = (controlEquipo.getPuntajeEquipo(equiposJugando[idx]) == maximoPuntajeActual) ? "GANO" : "PERDIO";

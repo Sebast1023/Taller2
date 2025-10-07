@@ -52,7 +52,6 @@ public class ControlArchivoAleatorio {
      * @param resultado
      */
     public void guardarResultado(String nombreEquipo, String[] nombresJugadores, String resultado) {
-        System.out.println("guradra");
         if (aleatoria == null) {
             return;
         }
