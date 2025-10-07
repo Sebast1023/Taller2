@@ -183,8 +183,9 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      * Metodo para pasar de modo elegir archivos a modo juego
      * @param equipo
      */
-    public void mostrarGanadores(String nombre, String[][] nombres, int equipo) {
+    public void mostrarGanadores(String nombre, String[][] nombres, int equipo, int puntaje) {
         PanelEquipo ganador = AgregarEquipo(nombre, nombres, equipo, false);
+        ganador.cambiarPuntajeEquipo(puntaje);
         ventana.mostrarGanadores(ganador);
     }    
     

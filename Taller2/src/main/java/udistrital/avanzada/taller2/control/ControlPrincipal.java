@@ -278,7 +278,7 @@ public class ControlPrincipal {
         // TODO Si no hay empate entonces mostrar equipo ganador
         String nombre = controlEquipo.getNombreEquipo(empatados.get(0));
         String[][] nombres = controlEquipo.getNombreApodoJugadores(empatados.get(0));
-        controlVentana.mostrarGanadores(nombre, nombres, equipoTurnoActual);
+        controlVentana.mostrarGanadores(nombre, nombres, equipoTurnoActual, maximoPuntajeActual);
         // ---------------------------------------------------------
         // Guardar resultados de la ronda en el archivo aleatorio:
         // Para cada equipo se grabará "GANÓ" si su puntaje == maximoPuntajeActual
