@@ -2,11 +2,17 @@ package udistrital.avanzada.taller2.vista;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JFileChooser;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.ArrayList;
+import udistrital.avanzada.taller2.control.EventoVentanaListener;
 
 /**
+ * Clase que muestra la interfaz gráfica
  *
  * @author Diego
  * @version 1.2
@@ -21,33 +27,39 @@ public class Ventana extends JFrame {
     private JPanel panelTitulo;
     private JPanel panelBotones;
     private JPanel panelCentro;
-
-    // Paneles de Equipos
-    private JPanel panelEquipoA;
-    private JPanel panelEquipoB;
+    private JScrollPane panelScroll;
+    private JPanel panelEquipos;
+    private CardLayout cardLayout;
+    private PanelArchivos panelArchivos;
+    private ArrayList<PanelEquipo> panelesEquipos;
 
     // Botones
     public JButton btnLanzar;
     public JButton btnNuevaRonda;
     public JButton btnSalir;
-
-    // Etiquetas de puntajes
-    public JLabel lblPuntajeA;
-    public JLabel lblPuntajeB;
+    public JButton btnTerminar;
+    public JButton btnArchivoProperties;
+    public JButton btnArchivoBin;
+    public JButton btnCargarArchivos;
 
     // Área de mensajes
     public JTextArea areaMensajes;
 
-    // Arreglos para los jugadores (A y B)
-    public JLabel[] lblFotosA;
-    public JLabel[] lblNombresA;
-    public JLabel[] lblFotosB;
-    public JLabel[] lblNombresB;
-
-    public Ventana(String title) {
+    public Ventana(String title, EventoVentanaListener evl) {
         super(title);
         setSize(1000, 600);
         setLocationRelativeTo(null); // centrar
+
+        // Evento cierre
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // La vista no pregunta, solo notifica al controlador
+                evl.salir();
+            }
+        });
+
         setVisible(true);
     }
 
@@ -64,23 +76,41 @@ public class Ventana extends JFrame {
         texto.setForeground(new Color(60, 30, 10));
         panelTitulo.add(texto);
 
-        // ===== Panel centro con equipos y mensajes =====
-        panelCentro = new JPanel(new GridLayout(1, 3, 15, 0));
+        // ===== Panel centro con panelEquipos y PanelArchivos =====
+        panelEquipos = new JPanel(new GridLayout(1, 3, 25, 0));
+        panelEquipos.setBackground(new Color(250, 245, 235));
+        panelEquipos.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10, 20, 10, 20),
+                BorderFactory.createLineBorder(new Color(180, 150, 100), 2, true)
+        ));
+        panelesEquipos = new ArrayList<>();
+
+        // Por si los equipos son muy grandes que se pueda hacer Scroll
+        panelScroll = new JScrollPane(
+                panelEquipos,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        // Modificar velocidad de Scrooll
+        panelScroll.getVerticalScrollBar().setUnitIncrement(16);
+
+        btnArchivoProperties = crearBoton("Escoger archivo propiedades", new Color(70, 130, 180));
+        btnArchivoBin = crearBoton("Escoger archivo serializado", new Color(70, 130, 180));
+        btnCargarArchivos = crearBoton("Cargar archivos", new Color(70, 130, 180));
+
+        btnArchivoProperties.setActionCommand("ObtenerProperties");
+        btnArchivoBin.setActionCommand("ObtenerSerializable");
+        btnCargarArchivos.setActionCommand("CargarArchivos");
+
+        panelArchivos = new PanelArchivos(btnArchivoProperties, btnArchivoBin);
+
+        cardLayout = new CardLayout();
+
+        panelCentro = new JPanel(cardLayout);
         panelCentro.setBackground(new Color(245, 245, 245));
-        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Panel Equipo A (nombre en el borde, puntaje abajo)
-        panelEquipoA = crearPanelEquipo("Equipo A", new Color(139, 69, 19));
-        lblPuntajeA = new JLabel("Puntaje: 0", JLabel.CENTER);
-        lblPuntajeA.setFont(new Font("SansSerif", Font.BOLD, 16));
-        lblPuntajeA.setForeground(new Color(139, 69, 19));
-        panelEquipoA.add(lblPuntajeA);
-
-        panelEquipoB = crearPanelEquipo("Equipo B", new Color(0, 100, 0));
-        lblPuntajeB = new JLabel("Puntaje: 0", JLabel.CENTER);
-        lblPuntajeB.setFont(new Font("SansSerif", Font.BOLD, 16));
-        lblPuntajeB.setForeground(new Color(0, 100, 0));
-        panelEquipoB.add(lblPuntajeB);
+        panelCentro.add(panelArchivos, "Archivos");
+        panelCentro.add(panelScroll, "Equipos");
 
         // ===== Panel mensajes en el centro =====
         JPanel panelMensajes = new JPanel(new BorderLayout());
@@ -98,154 +128,312 @@ public class Ventana extends JFrame {
         JScrollPane scroll = new JScrollPane(areaMensajes);
         panelMensajes.add(scroll, BorderLayout.CENTER);
 
-        // Añadir al centro
-        panelCentro.add(panelEquipoA);
-        panelCentro.add(panelMensajes);
-        panelCentro.add(panelEquipoB);
-
         // ===== Panel botones =====
-        panelBotones = new JPanel(new BorderLayout());
+        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(new Color(250, 245, 235)); // tono cálido como los demás
 
         btnSalir = crearBoton("❌ Salir", new Color(178, 34, 34));
         btnLanzar = crearBoton("🎲 Lanzar Argolla", new Color(70, 130, 180));
         btnNuevaRonda = crearBoton("🔄 Nueva Ronda", new Color(34, 139, 34));
+        btnTerminar = crearBoton("Terminar", new Color(178, 34, 34));
 
         btnSalir.setActionCommand("Salir");
         btnLanzar.setActionCommand("Lanzar");
         btnNuevaRonda.setActionCommand("NuevaRonda");
+        btnTerminar.setActionCommand("Terminar");
 
+        panelBotones.add(btnCargarArchivos, BorderLayout.EAST);
         panelBotones.add(btnSalir, BorderLayout.WEST);
-        panelBotones.add(btnLanzar, BorderLayout.CENTER);
-        panelBotones.add(btnNuevaRonda, BorderLayout.EAST);
 
         // ===== Ensamblar todo =====
         this.add(panelTitulo, BorderLayout.NORTH);
         this.add(panelCentro, BorderLayout.CENTER);
         this.add(panelBotones, BorderLayout.SOUTH);
 
-        // Evento cierre
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent) {
-                JOptionPane.showMessageDialog(null,
-                        "Usa el botón 'Salir' para cerrar el juego.",
-                        "Información",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
     }
 
     /**
-     * Método para crear un panel de equipo con espacio para 4 jugadores
-     */
-    private JPanel crearPanelEquipo(String titulo, Color colorBorde) {
-        JPanel panelEquipo = new JPanel();
-        panelEquipo.setLayout(new BoxLayout(panelEquipo, BoxLayout.Y_AXIS));
-        panelEquipo.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(colorBorde, 3, true),
-                titulo,
-                TitledBorder.CENTER,
-                TitledBorder.TOP,
-                new Font("SansSerif", Font.BOLD, 20),
-                colorBorde
-        ));
-        panelEquipo.setBackground(new Color(255, 250, 240));
-
-        // Espacios para 4 jugadores
-        JPanel contenedorJugadores = new JPanel(new GridLayout(4, 1, 8, 8));
-        contenedorJugadores.setBackground(new Color(255, 250, 240));
-
-        JLabel[] fotos = new JLabel[4];
-        JLabel[] nombres = new JLabel[4];
-
-        for (int i = 0; i < 4; i++) {
-            JPanel jugadorPanel = new JPanel(new BorderLayout(5, 5));
-            jugadorPanel.setBackground(new Color(255, 255, 255));
-            jugadorPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-
-            fotos[i] = new JLabel("📷", JLabel.CENTER);
-            fotos[i].setPreferredSize(new Dimension(80, 80));
-            fotos[i].setOpaque(true);
-            fotos[i].setBackground(new Color(230, 230, 230));
-            fotos[i].setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
-
-            nombres[i] = new JLabel("Jugador " + (i + 1), JLabel.CENTER);
-            nombres[i].setFont(new Font("SansSerif", Font.PLAIN, 14));
-
-            jugadorPanel.add(fotos[i], BorderLayout.CENTER);
-            jugadorPanel.add(nombres[i], BorderLayout.SOUTH);
-
-            contenedorJugadores.add(jugadorPanel);
-        }
-
-        panelEquipo.add(contenedorJugadores);
-
-        // Guardar referencias en variables globales
-        if (titulo.contains("A")) {
-            lblFotosA = fotos;
-            lblNombresA = nombres;
-        } else {
-            lblFotosB = fotos;
-            lblNombresB = nombres;
-        }
-
-        return panelEquipo;
-    }
-
-    /**
-     * Actualiza el título del panel del equipo A (TitledBorder).
-     */
-    public void setTituloEquipoA(String titulo) {
-        if (panelEquipoA != null && panelEquipoA.getBorder() instanceof TitledBorder) {
-            TitledBorder tb = (TitledBorder) panelEquipoA.getBorder();
-            tb.setTitle(titulo);
-            panelEquipoA.repaint();
-            panelEquipoA.revalidate();
-        }
-    }
-
-    /**
-     * Actualiza el título del panel del equipo B (TitledBorder).
-     */
-    public void setTituloEquipoB(String titulo) {
-        if (panelEquipoB != null && panelEquipoB.getBorder() instanceof TitledBorder) {
-            TitledBorder tb = (TitledBorder) panelEquipoB.getBorder();
-            tb.setTitle(titulo);
-            panelEquipoB.repaint();
-            panelEquipoB.revalidate();
-        }
-    }
-
-    /**
-     * Crea botones estilizados
+     * Crea botones estilizados con bordes redondeados y efecto hover.
      */
     private JButton crearBoton(String texto, Color colorFondo) {
         JButton boton = new JButton(texto);
-        boton.setFont(new Font("SansSerif", Font.BOLD, 16));
-        boton.setBackground(colorFondo);
+        boton.setFont(new Font("SansSerif", Font.BOLD, 15));
         boton.setForeground(Color.WHITE);
+        boton.setBackground(colorFondo);
         boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        boton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(colorFondo.darker(), 2, true),
+                BorderFactory.createEmptyBorder(10, 25, 10, 25)
+        ));
         boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton.setOpaque(true);
 
-        // Efecto hover
-        boton.addChangeListener(e -> {
-            if (boton.getModel().isRollover()) {
+        // Efecto hover más visible
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
                 boton.setBackground(colorFondo.darker());
-            } else {
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
                 boton.setBackground(colorFondo);
             }
         });
 
+        // Efecto de sombra ligera
+        boton.setBorderPainted(true);
+        boton.setFocusPainted(false);
+        boton.setContentAreaFilled(true);
+
         return boton;
     }
 
-    // Métodos para mensajes emergentes
+    /**
+     * Método cuadro de dialgo con mensajes emergentes indicando el componente
+     *
+     * @param componente
+     * @param mensaje
+     */
     public void mensajeEmergente(Component componente, String mensaje) {
         JOptionPane.showMessageDialog(componente, mensaje);
     }
 
+    /**
+     * Método cuadro de dialogo con mensajes
+     *
+     * @param mensaje
+     */
     public void mostrarMensajeEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    /**
+     * Método cuadro de dialgo con informacion del tiro y jugador
+     *
+     * @param mensaje
+     */
+    public void mostrarMensajeEmergenteTiro(String mensaje) {
+        JLabel lblMensaje = new JLabel(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.BOLD, 16));
+        lblMensaje.setForeground(new Color(0, 102, 204));
+        JOptionPane.showMessageDialog(this, lblMensaje, "Resultado Lanzamiento", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Mostra mensaje en consola
+     *
+     * @param mensaje
+     */
+    public void mostrarEnConsola(String mensaje) {
+        System.out.println(mensaje);
+    }
+
+    /**
+     * Mostrar mensaje de error en consola
+     *
+     * @param mensaje
+     */
+    public void mostrarErrorEnConsola(String mensaje) {
+        System.err.println(mensaje);
+    }
+
+    /**
+     * metodo para obtener la instancia de JFileChooser con la cual se escogeran
+     * archivos de precarga
+     *
+     * @return retorna un JFileChooser
+     */
+    public JFileChooser obtenerFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        //Carpeta donde se guardan archivos de precarga y poscarga
+        File carpetaInicial = new File("Specs/data");
+        // Que se abra en la carpeta data predeterminadamente
+        fileChooser.setCurrentDirectory(carpetaInicial);
+        return fileChooser;
+    }
+
+    /**
+     * metodo sobrecargado para obtener la instancia de JFileChooser con la cual
+     * se escogeran archivos de precarga con un filtro
+     *
+     * @param descripcion el mensaje que aparecera en el Chooser
+     * @param extension la extension de los archivos permitidos
+     * @return retorna un JFileChooser
+     */
+    public JFileChooser obtenerFileChooser(String descripcion, String extension) {
+        JFileChooser fileChooser = new JFileChooser();
+        //Carpeta donde se guardan archivos de precarga y poscarga
+        File carpetaInicial = new File("Specs/data");
+        // Que se abra en la carpeta data predeterminadamente
+        fileChooser.setCurrentDirectory(carpetaInicial);
+        // Filtro con el mensaje que aparecera y la extension del mismo
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(descripcion, extension);
+        fileChooser.setFileFilter(filtro);
+        return fileChooser;
+    }
+
+    /**
+     * Metodo para agregar equipo vacio a la interfaz
+     *
+     * @param titulo
+     * @param colorBorde
+     * @param colorPuntaje
+     * @return PanelEquipo creado
+     */
+    public PanelEquipo agregarEquipo(String titulo, Color colorBorde, Color colorPuntaje) {
+        PanelEquipo panelEquipo = new PanelEquipo(titulo, colorBorde, colorPuntaje);
+        panelEquipos.add(panelEquipo);
+        panelesEquipos.add(panelEquipo);
+        return panelEquipo;
+    }
+
+    /**
+     * Metodo para mostra panel equipos y quitar panel de eleccion de de
+     * archivos (PanelArchivos)
+     */
+    public void mostrarEquipos() {
+        cardLayout.show(panelCentro, "Equipos");
+        panelCentro.revalidate();
+        panelCentro.repaint();
+        mostrarBotonesJuego();
+    }
+
+    /**
+     * Metodo para mostrar los botones de ronda
+     */
+    public void mostrarBotonesJuego() {
+        panelBotones.removeAll();
+        panelBotones.add(btnTerminar, BorderLayout.WEST);
+        panelBotones.add(btnLanzar, BorderLayout.EAST);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+
+    /**
+     * Metodo para mostrar opciones de nueva partida y terminar
+     */
+    public void mostrarBotonesTerminar() {
+        panelBotones.removeAll();
+        panelBotones.add(btnTerminar, BorderLayout.WEST);
+        panelBotones.add(btnNuevaRonda, BorderLayout.EAST);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+
+    /**
+     * Metodo para mostrar solo boton de salida
+     */
+    public void mostrarBotonSalir() {
+        panelBotones.removeAll();
+        panelBotones.add(btnSalir, BorderLayout.WEST);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+
+    /**
+     * Metodo para resaltar un jugador en especifico
+     *
+     * @param indiceEquipo
+     * @param indiceJugador
+     */
+    public void resaltarJugador(int indiceEquipo, int indiceJugador) {
+        PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);
+        panelEquipo.resaltarJugador(indiceJugador);
+    }
+
+    /**
+     * Metodo para desresaltar un jugador en especifico
+     *
+     * @param indiceEquipo
+     * @param indiceJugador
+     */
+    public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
+        PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);;
+        panelEquipo.desResaltarJugador(indiceJugador);
+    }
+
+    /**
+     * Metodo para cambiar el nombre del archivo propiedades escogido
+     *
+     * @param nombre
+     */
+    public void setNombreArchivoProp(String nombre) {
+        panelArchivos.setLblArchivoPropEscogido(nombre);
+    }
+
+    /**
+     * Metodo para cambiar el nombre del archivo serializado escogido
+     *
+     * @param nombre
+     */
+    public void setNombreArchivoBin(String nombre) {
+        panelArchivos.setLblArchivoBinEscogido(nombre);
+    }
+
+    /**
+     * Metodo para obtener el origen desde donde se cargan los datos de los
+     * archivos cargados
+     *
+     * @return
+     */
+    public String getSeleccionOrigenCarga() {
+        return panelArchivos.getOpcionSeleccionada();
+    }
+
+    /**
+     * Metodo para mostrar la opcion de cargar un archivo serializado
+     */
+    public void activarEleccionDeArchivoSerializado() {
+        panelArchivos.mostrarOpcionSerializador();
+    }
+
+    /**
+     * Metodo para mostrar algun mensaje en PanelArchivos
+     *
+     * @param mensaje
+     */
+    public void mostrarMensajeArchivo(String mensaje) {
+        panelArchivos.setLblMensaje(mensaje);
+    }
+
+    /**
+     * Metodo para actualizar puntaje de equipo en especifico
+     *
+     * @param indice
+     * @param puntaje
+     */
+    public void setPuntajeEquipo(int indice, int puntaje) {
+        PanelEquipo pEquipo = panelesEquipos.get(indice);;
+        pEquipo.cambiarPuntajeEquipo(puntaje);
+    }
+
+    /**
+     * Metodo para cambiar el nombre de un equipo en especifico
+     *
+     * @param indice
+     * @param nombre
+     */
+    public void setNombreEquipo(int indice, String nombre) {
+        panelesEquipos.get(indice).setNombreEquipo(nombre);
+    }
+
+    /**
+     * Metodo para obtener un PanelEquipo en especifico
+     *
+     * @param indice
+     * @return PanelEqupo
+     */
+    public PanelEquipo getPanelEquipo(int indice) {
+        return panelesEquipos.get(indice);
+    }
+
+    /**
+     * Metodo que obtine los paneles de los equipos creados
+     *
+     * @return arraylist de PanelEquipo
+     */
+    public ArrayList<PanelEquipo> getPanelesEquipos() {
+        return panelesEquipos;
     }
 }
