@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import udistrital.avanzada.taller2.control.EventoVentanaListener;
 
 /**
  *
@@ -43,10 +44,21 @@ public class Ventana extends JFrame {
     // Área de mensajes
     public JTextArea areaMensajes;
 
-    public Ventana(String title) {        
+    public Ventana(String title, EventoVentanaListener evl) {        
         super(title);
         setSize(1000, 600);
         setLocationRelativeTo(null); // centrar
+        
+        
+        // Evento cierre
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {   
+                evl.salir();
+            }
+        });
+        
         setVisible(true);
     }
 
@@ -131,17 +143,7 @@ public class Ventana extends JFrame {
         this.add(panelTitulo, BorderLayout.NORTH);
         this.add(panelCentro, BorderLayout.CENTER);
         this.add(panelBotones, BorderLayout.SOUTH);
-
-        // Evento cierre
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent) {
-                JOptionPane.showMessageDialog(null,
-                        "Usa el botón 'Salir' para cerrar el juego.",
-                        "Información",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        
     }
 
     /**

@@ -7,16 +7,19 @@ package udistrital.avanzada.taller2.control;
 import java.io.File;
 import java.util.ArrayList;
 import udistrital.avanzada.taller2.modelo.Equipo;
-import udistrital.avanzada.taller2.modelo.SerializadorEquipos;
+import udistrital.avanzada.taller2.modelo.ConexionSerializador;
 
 /**
- *
- * @author mauri
+ * Clase que maneja logica para la interaccion con los
+ * archivos serializados
+ * 
+ * @author mauricio
+ * @since 07/10/2025
  */
 public class ControlArchivoSerializado {
 
     public ArrayList<Equipo> cargarArchivoSerializable(File archivo) {
-        SerializadorEquipos se = new SerializadorEquipos();                
+        ConexionSerializador se = new ConexionSerializador();                
         ArrayList<Equipo> equipos = se.leerArchivoSerializado(archivo);
         se.cerrarArchivoSerializadoIn();
         se.cerrarArchivoSerializadoOut();        
@@ -24,7 +27,7 @@ public class ControlArchivoSerializado {
     }
 
     public void serializarEquipos(ArrayList<Equipo> equipos) {
-        SerializadorEquipos se = new SerializadorEquipos();
+        ConexionSerializador se = new ConexionSerializador();
         se.config();
         se.escribirArchivoSerializado(equipos);
         se.cerrarArchivoSerializadoOut();
@@ -32,7 +35,7 @@ public class ControlArchivoSerializado {
     }
 
     public boolean existeArchivoSerializadoEquipos() {
-        SerializadorEquipos se = new SerializadorEquipos();
+        ConexionSerializador se = new ConexionSerializador();
         boolean existe = se.existeBin();
         se.cerrarArchivoSerializadoOut();
         se.cerrarArchivoSerializadoIn();

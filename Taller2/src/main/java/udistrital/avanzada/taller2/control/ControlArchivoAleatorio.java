@@ -10,8 +10,11 @@ import java.util.List;
 import udistrital.avanzada.taller2.modelo.ConexionAleatoria;
 
 /**
- *
- * @author mauri
+ * Clase que maneja logica para la interaccion con los
+ * archivos Aleatorios
+ * 
+ * @author sebastian
+ * @author 07/210/2025
  */
 public class ControlArchivoAleatorio {
     private ConexionAleatoria aleatoria;
@@ -69,7 +72,9 @@ public class ControlArchivoAleatorio {
         }
     }
 
-    /** Cierra el archivo aleatorio */
+    /**
+     * Metodo que cierra el archivo aleatorio 
+     */
     public void cerrar() {
         try {
             if (aleatoria != null) aleatoria.cerrar();

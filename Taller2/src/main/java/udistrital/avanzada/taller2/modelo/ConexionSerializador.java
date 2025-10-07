@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * @author Mauricio
  * @since 04/10/2025
  */
-public class SerializadorEquipos {
+public class ConexionSerializador {
 
     //Canal de salida para escribir en el archivo de serializacion
     private FileOutputStream fileOut;
@@ -36,7 +36,7 @@ public class SerializadorEquipos {
 
     private String rutaPredeterminada;
 
-    public SerializadorEquipos() {
+    public ConexionSerializador() {
         // Ubicacion donde ira el archivo predeterminadamente
         rutaPredeterminada = "Specs/data/equipos.bin";
     }

@@ -15,21 +15,29 @@ import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
 import udistrital.avanzada.taller2.vista.PanelEquipo;
 
 /**
- *
+ * Clase encargada de la logica de la venta
+ * 
  * @author Diego
  * @version 1.1
  * @since 30/09/2025
  */
-public class ControlVentana implements ActionListener, ImpresorConsola {
+public class ControlVentana implements ActionListener, ImpresorConsola, EventoVentanaListener {
 
     private ControlPrincipal logica;
     private Ventana ventana;
     private ArchivoSeleccionado archivosSeleccionados;
-
+    /**
+     * Contructor
+     * 
+     * @param controlPrincipal 
+     */
+    
+    //Inyeccion de dependicias
     public ControlVentana(ControlPrincipal controlPrincipal) {
         this.logica = controlPrincipal;
         this.archivosSeleccionados = new ArchivoSeleccionado();
-        ventana = new Ventana("Juego de la Argolla");
+        // Inyeccion para manejar el evento cerra
+        ventana = new Ventana("Juego de la Argolla", this);
 
         // registrar listeners
         ventana.btnLanzar.addActionListener(this);
@@ -40,20 +48,14 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
         ventana.btnCargarArchivos.addActionListener(this);
         ventana.btnTerminar.addActionListener(this);
     }
-
+    
     private void lanzarArgolla() {
         ventana.areaMensajes.append(">> Lanzamiento realizado...\n");
     }
 
     private void nuevaRonda() {
         ventana.areaMensajes.setText("");
-    }
-
-    private void salir() {
-        ventana.setVisible(false);
-        ventana.dispose();
-        System.exit(0);
-    }
+    }        
 
     /**
      * Metodo para que el usuario eliga el archivo de precargar .Properties
@@ -159,24 +161,41 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
     public void mostrarMenuArchivos() {
         ventana.activarEleccionDeArchivoSerializado();
     }
-
+    
+    /**
+     * Metodo para mostrar a usuario mensaje de error al cargar mal
+     * los archivos
+     * 
+     * @param mensaje 
+     */
     public void mostrarMensajeArchivo(String mensaje) {
         ventana.mostrarMensajeArchivo(mensaje);
     }
-
+    
+    /**
+     * Metodo para pasar de modo elegir archivos a modo juego
+     */
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
     }    
     
+    /**
+     * Metodo para agregar un equipo a la interfaz gráfica
+     * @param nombre nombre del equipo
+     * @param nombres matriz de strings con nombres poscion 0 y apodos en 1 de los jugadores
+     * @param equipo indica si es equipo A si se pasa 1 y B si se pasa 2
+     */
     public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
+        // Creamos los colores segun corresponda
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
-
+        // Creamos el panel
         PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje);
 
         ImageIcon imagenJugador = null;
-
+        // recorremos todos los jugadores
         for (int i = 0; i < nombres[0].length; i++) {
+            // configuramos la foto predeterminada
             String nombreArchivo = (equipo == 1) ? "jugadorA" : "jugadorB";
             nombreArchivo = +(i + 1) + ".png";
             String ruta = "Specs/data/images/" + nombreArchivo;
@@ -189,41 +208,77 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
                 Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
                 imagenJugador = new ImageIcon(img);
             }
+            // Agremos el jugaddor al panel equipo
             panelEquipo.agregarJugador(nombres[0][i], i);
-
+            // Si la imagen es valida le hacemos set para que se muestre
             if (imagenJugador != null) {
                 panelEquipo.setFotoJugador(i, imagenJugador);
             }
         }
     }
-
+    
+    /**
+     * Metodo para resaltar jugador que esta en su turno
+     * 
+     * @param indiceEquipo
+     * @param indiceJugador 
+     */
     public void resaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.resaltarJugador(indiceEquipo, indiceJugador);
     }
-
+    
+    /**
+     * Metodo para resaltar jugador que ya termnio su turno
+     * 
+     * @param indiceEquipo
+     * @param indiceJugador 
+     */
     public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
         ventana.desResaltarJugador(indiceEquipo, indiceJugador);
     }
-
+    
+    /**
+     * Metodo para actualizar el puntaje de un equipo
+     * 
+     * @param indiceEquipo
+     * @param puntaje 
+     */
     public void setPuntajeEquipo(int indiceEquipo, int puntaje) {
         ventana.setPuntajeEquipo(indiceEquipo, puntaje);
     }
-
+    
+    /**
+     * Metodo para mostrar menu de otra ronda
+     */
     public void mostraMenuTerminar() {
         ventana.mostrarBotonesTerminar();
     }
-
+    
+    /**
+     * Metodo para mostrar menu de salir
+     */
     public void mostraMenuSalir() {
         ventana.mostrarBotonSalir();
     }
-
+    
+    /**
+     * Metodo para resetear en la vista todos los puntajes a cero
+     * por jugar nueva mano
+     */
     public void resetearPuntaje() {
         ArrayList<PanelEquipo> paneles = (ArrayList<PanelEquipo>) ventana.getPanelesEquipos();
         for (PanelEquipo panel : paneles) {
             panel.cambiarPuntajeEquipo(0);
         }
     }
-
+    
+    /**
+     * Metodo para actualizar el panel Equipo y mostra el que se pase
+     * 
+     * @param indice del panel a editar
+     * @param nombreEquipo 
+     * @param nombres matriz de string posicion 0 nombres y posicion 1 apodos de jugadores
+     */
     public void modificarEquipo(int indice, String nombreEquipo, String[][] nombres) {
         PanelEquipo panel = ventana.getPanelEquipo(indice);
         panel.setNombreEquipo(nombreEquipo);
@@ -248,6 +303,17 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
         mostrarMensajeEnConsola("====================================\n");        
     }
     
+    /**
+     * Metodo para cerrar la aplicacion
+     */
+    @Override
+    public void salir() {
+        logica.salir();
+        ventana.setVisible(false);
+        ventana.dispose();
+        System.exit(0);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -262,8 +328,7 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
                 ventana.mostrarBotonesJuego();
                 logica.nuevaMano();
                 break;
-            case "Salir":
-                logica.salir();
+            case "Salir":                
                 salir();
                 break;
             case "ObtenerProperties":
