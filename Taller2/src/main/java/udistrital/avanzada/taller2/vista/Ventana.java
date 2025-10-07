@@ -358,17 +358,31 @@ public class Ventana extends JFrame {
     }
 
     // ===== CARGA DE IMAGEN =====
+    /**
+     * Carga la imagen de un jugador desde la carpeta Specs/data/images/ Si no
+     * se encuentra, carga una imagen predeterminada.
+     */
     private ImageIcon cargarFotoJugador(String nombreArchivo) {
+        // Ruta donde están las imágenes (fuera de src)
         String ruta = "Specs/data/images/" + nombreArchivo;
-        java.net.URL url = getClass().getClassLoader().getResource(ruta);
-        if (url == null) {
-            url = getClass().getClassLoader().getResource("Specs/data/images/predeterminada.png");
+
+        // Crear referencia al archivo en el sistema de archivos
+        java.io.File archivo = new java.io.File(ruta);
+
+        // Si no existe la imagen, usar una predeterminada
+        if (!archivo.exists()) {
+            archivo = new java.io.File("Specs/data/images/predeterminada.png");
         }
-        if (url != null) {
-            ImageIcon icono = new ImageIcon(url);
+
+        // Cargar la imagen si existe
+        if (archivo.exists()) {
+            ImageIcon icono = new ImageIcon(archivo.getAbsolutePath());
             Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
             return new ImageIcon(img);
+        } else {
+            System.err.println("⚠ No se encontró la imagen: " + ruta);
+            return null;
         }
-        return null;
     }
+
 }

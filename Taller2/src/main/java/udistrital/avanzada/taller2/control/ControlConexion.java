@@ -2,22 +2,22 @@ package udistrital.avanzada.taller2.control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 
 /**
- * Clase ControlConexion. Descripción: Esta clase se encargará de la conexión
- * con los diferentes archivos, por ahora implementa la lectura del archivo
- * configuracion.properties y carga equipos/jugadores y tiros/puntajes en los
- * controladores que se le inyecten.
+ * Clase ControlConexion. Descripción: Se encarga de la conexión con los
+ * diferentes archivos, implementando la lectura de configuracion.properties y
+ * cargando equipos/jugadores.
  *
  * NOTA: por la especificación del taller, el .properties debe estar en:
  * Specs/data/configuracion.properties
  *
  * @author Diego
- * @version 1.0
- * @since 03/10/2025
+ * @version 1.1
+ * @since 07/10/2025
  */
 public class ControlConexion {
 
@@ -25,9 +25,9 @@ public class ControlConexion {
     private ControlTiro controlTiro;
 
     /**
-     * Ruta por defecto
+     * Ruta por defecto (fuera de src)
      */
-    private String rutaPorDefecto = "Specs/data/configuracion.properties";
+    private final String rutaPorDefecto = "Specs/data/configuracion.properties";
 
     public ControlConexion(ControlEquipo controlEquipo, ControlTiro controlTiro) {
         this.controlEquipo = controlEquipo;
@@ -35,26 +35,25 @@ public class ControlConexion {
     }
 
     /**
-     * Carga usando la ruta por defecto
-     * @return 
+     * Carga usando la ruta por defecto.
      */
     public boolean cargarDesdeArchivo() {
         return cargarDesdeArchivo(rutaPorDefecto);
     }
 
     /**
-     * Carga la configuración desde un archivo .properties dado. Rellena
-     * controlEquipo y controlTiro con los datos leídos.
+     * Carga la configuración desde un archivo .properties dado.
      *
      * @param rutaArchivo ruta al archivo properties
-     * @return true si la carga fue exitosa, false en caso de error
+     * @return true si la carga fue exitosa, false si ocurre error
      */
     public boolean cargarDesdeArchivo(String rutaArchivo) {
         Properties prop = new Properties();
-        try (var inputStream = getClass().getClassLoader().getResourceAsStream(rutaArchivo)) {
+
+        try (InputStream inputStream = obtenerInputStream(rutaArchivo)) {
 
             if (inputStream == null) {
-                System.err.println("⚠ No se encontró el archivo de configuración en: " + rutaArchivo);
+                System.err.println("⚠ No se encontró el archivo: " + rutaArchivo);
                 return false;
             }
 
@@ -66,7 +65,7 @@ public class ControlConexion {
                 String nombreEquipo = prop.getProperty("equipo" + i + ".nombre", "Equipo" + i);
                 Equipo equipo = controlEquipo.crearEquipo(nombreEquipo);
 
-                // el requerimiento dice 4 jugadores/Equipo
+                // Por requerimiento: 4 jugadores por equipo
                 for (int j = 1; j <= 4; j++) {
                     String nombreJugador = prop.getProperty("equipo" + i + ".jugador" + j + ".nombre", "Jugador " + j);
                     String apodoJugador = prop.getProperty("equipo" + i + ".jugador" + j + ".apodo", "");
@@ -84,10 +83,29 @@ public class ControlConexion {
             }
 
             return true;
+
+        } catch (IOException ex) {
+            System.err.println("❌ Error al leer archivo: " + ex.getMessage());
+            return false;
         } catch (Exception ex) {
-            System.err.println("❌ ControlConexion - Error cargando archivo: " + ex.getMessage());
+            System.err.println("❌ Error general: " + ex.getMessage());
             return false;
         }
     }
 
+    /**
+     * Permite compatibilidad con proyectos que tengan Specs dentro o fuera de
+     * src.
+     */
+    private InputStream obtenerInputStream(String rutaArchivo) {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(rutaArchivo);
+        if (inputStream == null) {
+            try {
+                inputStream = new FileInputStream(rutaArchivo);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+        return inputStream;
+    }
 }
