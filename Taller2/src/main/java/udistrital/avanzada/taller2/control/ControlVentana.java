@@ -205,13 +205,6 @@ public class ControlVentana implements ActionListener {
     }
 
     public void resetearPuntaje() {
-//<<<<<<< HEAD
-//        Component[] aux = ventana.getPanelesEquipos();
-//        for (Component component : aux) {
-//            if (component instanceof PanelEquipo) {
-//                ((PanelEquipo) component).cambiarPuntajeEquipo(0);
-//            }
-//=======
         ArrayList<PanelEquipo> paneles = (ArrayList<PanelEquipo>) ventana.getPanelesEquipos();
         for (PanelEquipo panel : paneles) {
             panel.cambiarPuntajeEquipo(0);

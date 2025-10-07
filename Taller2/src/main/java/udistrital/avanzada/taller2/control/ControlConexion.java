@@ -86,11 +86,6 @@ public class ControlConexion {
         for (int i = 1; i <= numeroEquipos; i++) {
             boolean bandera = true;
             String nombreEquipo = props.getProperty("equipo" + i + ".nombre");
-//<<<<<<< HEAD
-//            if (nombreEquipo == null) continue;
-//
-//            Equipo equipo = controlEquipo.crearEquipo(nombreEquipo);
-//=======
             if (nombreEquipo == null) {
                 continue;
             }
@@ -104,10 +99,6 @@ public class ControlConexion {
                 Jugador jugador = controlJugador.crearJugador(nombreJugador, apodoJugador);
                 controlEquipo.agregarJugador(equipo, jugador);
             }
-//<<<<<<< HEAD
-//
-//            if (completo) controlEquipo.agregarEquipo(equipo);
-//=======
             if (!bandera) {
                 controlEquipo.removeEquipo(equipo);
             }
