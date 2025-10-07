@@ -1,9 +1,13 @@
 package udistrital.avanzada.taller2.control;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
 import udistrital.avanzada.taller2.modelo.ArchivoSeleccionado;
@@ -142,10 +146,32 @@ public class ControlVentana implements ActionListener {
         ventana.mostrarEquipos();
     }    
     
-    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {        
-        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre);
-        for (int i = 0; i < nombres.length; i++) {
-            panelEquipo.agregarJugador(nombres[i], i);
+    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {   
+        Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
+        Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
+        
+        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje);  
+        
+        ImageIcon imagenJugador = null;                
+        
+        for (int i = 0; i < nombres.length; i++) {                        
+            String nombreArchivo = (equipo == 1) ? "jugadorA" : "jugadorB";
+            nombreArchivo =+ (i + 1) + ".png";            
+            String ruta = "Specs/data/images/" + nombreArchivo;
+            URL url = getClass().getClassLoader().getResource(ruta);
+            if (url == null) {
+                url = getClass().getClassLoader().getResource("Specs/data/images/predeterminada.png");
+            }
+            if (url != null) {
+                ImageIcon icono = new ImageIcon(url);
+                Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                imagenJugador = new ImageIcon(img);
+            }
+            panelEquipo.agregarJugador(nombres[0][i],i);
+            
+            if (imagenJugador != null) {
+                panelEquipo.setFotoJugador(i, imagenJugador);
+            }            
         }
     }    
     
@@ -179,6 +205,7 @@ public class ControlVentana implements ActionListener {
     }
 
     public void modificarEquipo(int indice, String nombreEquipo, String[][] nombresApodos) {
+        
         //TODO llamar a metodo de actulizar equipo de ventana
     }
     

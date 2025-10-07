@@ -61,18 +61,13 @@ public class Ventana extends JFrame {
         texto.setForeground(new Color(60, 30, 10));
         panelTitulo.add(texto);
 
-        // ===== Panel centro con equipos y mensajes =====
-        panelEquipos = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
-
-        JPanel wrapper = new JPanel();
-        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        wrapper.add(panelEquipos);
-        
-        panelEquipos.setAlignmentX(Component.LEFT_ALIGNMENT);
-        wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // ===== Panel centro con panelEquipos y PanelArchivos =====
+        panelEquipos = new JPanel(new GridLayout(1, 3, 15, 0));
+        panelEquipos.setBackground(new Color(245, 235, 220));
+        panelEquipos.setBorder(BorderFactory.createEmptyBorder(10, 20, 5, 20));
 
         panelScroll = new JScrollPane(
-                wrapper,
+                panelEquipos,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
         );
@@ -218,8 +213,8 @@ public class Ventana extends JFrame {
         return fileChooser;
     }
 
-    public PanelEquipo agregarEquipo(String titulo) {
-        PanelEquipo panelEquipo = new PanelEquipo(titulo, Color.green);
+    public PanelEquipo agregarEquipo(String titulo, Color colorBorde, Color colorPuntaje) {
+        PanelEquipo panelEquipo = new PanelEquipo(titulo, colorBorde, colorPuntaje);
         panelEquipos.add(panelEquipo);
         return panelEquipo;
     }

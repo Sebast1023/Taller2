@@ -342,11 +342,13 @@ public class ControlPrincipal {
             if (partidasJugadas == 0) {
                 nombre = controlEquipo.obtenerNombreEquipo(indice);
                 nombres = controlEquipo.getNombreApodoJugadores(indice);
+                controlVentana.AgregarEquipo(nombre, nombres, i);
             } else {
                 nombre = controlEquipo.obtenerNombreEquipo(partidasJugadas+1);
                 nombres = controlEquipo.getNombreApodoJugadores(partidasJugadas+1);
+                controlVentana.modificarEquipo(i, nombre, nombres);
             }   
-            controlVentana.modificarEquipo(i, nombre, nombres);
+            
             indice += 1; 
         }        
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);

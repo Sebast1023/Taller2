@@ -8,7 +8,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -24,20 +26,23 @@ public class PanelJugador extends JPanel {
     public PanelJugador(String nombres, int indice) {
         this.setLayout(new BorderLayout(5, 5));
         this.setBackground(new Color(255, 255, 255));
-        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        this.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
         this.setPreferredSize(new Dimension(120, 80));
 
-        foto = new JLabel("📷", JLabel.CENTER);
-        foto.setPreferredSize(new Dimension(80, 80));
-        foto.setOpaque(true);
-        foto.setBackground(new Color(230, 230, 230));
-        foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+        this.foto = new JLabel("📷", JLabel.CENTER);
+        this.foto.setPreferredSize(new Dimension(100, 100));
+        this.foto.setOpaque(true);
+        this.foto.setBackground(new Color(235, 235, 235));
+        this.foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 
         nombre = new JLabel(nombres + (indice + 1), JLabel.CENTER);
         nombre.setFont(new Font("SansSerif", Font.PLAIN, 14));
-
-        this.add(foto, BorderLayout.CENTER);
-        this.add(nombre, BorderLayout.SOUTH);        
+        
+        this.add(this.foto, BorderLayout.CENTER);
+        this.add(nombre, BorderLayout.SOUTH);
     }
 
     public void resaltar() {
@@ -50,4 +55,11 @@ public class PanelJugador extends JPanel {
         this.repaint();
     }
 
+    public void setNombre(String nombre) {
+        this.nombre.setText(nombre);
+    }
+
+    public void setFoto(ImageIcon foto) {
+        this.foto.setIcon(foto);
+    }
 }
