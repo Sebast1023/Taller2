@@ -162,4 +162,15 @@ public class ControlEquipo {
         return equipos.get(indice).getNombreApodoJugadores();
     }
     
+    public void removeEquipo(int indice) {
+        equipos.remove(indice);
+    }
+
+    public ArrayList<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(ArrayList<Equipo> equipos) {
+        this.equipos = equipos;
+    }    
 }

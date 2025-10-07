@@ -1,6 +1,7 @@
 package udistrital.avanzada.taller2.modelo;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Clase equipo que es la base para el juego por equipos. Tienen 4 jugadores en
@@ -67,7 +68,7 @@ public class Equipo implements Serializable {
     }
 
     public Jugador[] getJugadores() {
-        return Arrays.copyOf(jugadores, jugadores.length);;
+        return Arrays.copyOf(jugadores, jugadores.length);
     }
 
     public int getPosicion() {
@@ -123,11 +124,12 @@ public class Equipo implements Serializable {
      * @return array de string primero posicion con el array de nombre, seguda posicion con array de apodos
      */
     public String[][] getNombreApodoJugadores() {
-        String[][] nombres = new String[2][jugadores.length];
-        for(i = 0; i < jugadores.length; i++) {
+        String[][] nombres = new String[2][jugadores.length];        
+        for(int i = 0; i < jugadores.length; i++) {
             nombres[0][i] = jugadores[i].getNombre();
             nombres[1][i] = jugadores[i].getApodo();
         }
+        return nombres;
     }
 
     @Override

@@ -108,8 +108,8 @@ public class ControlConexion {
                 Jugador jugador = controlJugador.crearJugador(nombreJugador, apodoJugador);
                 controlEquipo.agregarJugador(equipo, jugador);
             }
-            if (bandera) {
-                controlEquipo.agregarEquipo(equipo);
+            if (!bandera) {
+                controlEquipo.removeEquipo(equipo);
             }
         }
     }
