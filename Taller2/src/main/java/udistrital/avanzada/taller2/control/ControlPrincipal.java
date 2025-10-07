@@ -68,7 +68,10 @@ public class ControlPrincipal {
 
     public void nuevaMano() {
         // Si ya se jugaron todas las partidas salir de la funcion
-        if (partidasJugadas == partidasMaximas) {
+        boolean condicion = (controlEquipo.getTamaño()/2 == partidasJugadas && controlEquipo.getTamaño()%2 != 0);
+                
+        if (partidasJugadas == partidasMaximas || controlEquipo.getTamaño()/2 == partidasJugadas ||condicion){
+            controlVentana.mostraMenuSalir();
             return;
         }
         pintarEquipos();
@@ -268,7 +271,7 @@ public class ControlPrincipal {
         this.partidasJugadas += 1;
         // activar modo para lanzamiento normal
         empate = false;
-        if (partidasJugadas >= partidasMaximas) {
+        if (partidasJugadas >= partidasMaximas || controlEquipo.getTamaño()/2 == partidasJugadas) {
             controlVentana.mostraMenuSalir();
             //mostar boton salir, ocultar boton de otra partida            
         } else {                        
@@ -336,7 +339,7 @@ public class ControlPrincipal {
         if (partidasJugadas == 0){
             indice = 0;
         } else {
-            indice = partidasJugadas;
+            indice = partidasJugadas+1;
         }
         for (int i = 0; i < 2; i++) {
             if (partidasJugadas == 0) {
@@ -344,11 +347,10 @@ public class ControlPrincipal {
                 nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.AgregarEquipo(nombre, nombres, i);
             } else {
-                nombre = controlEquipo.obtenerNombreEquipo(partidasJugadas+1);
-                nombres = controlEquipo.getNombreApodoJugadores(partidasJugadas+1);
+                nombre = controlEquipo.obtenerNombreEquipo(indice);
+                nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.modificarEquipo(i, nombre, nombres);
-            }   
-            
+            }            
             indice += 1; 
         }        
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);

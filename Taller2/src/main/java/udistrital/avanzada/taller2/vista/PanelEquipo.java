@@ -78,6 +78,7 @@ public class PanelEquipo extends JPanel {
 
     public void setNombreEquipo(String titulo) {
         titledBorderNombreEquipo.setTitle(titulo);
+        this.revalidate();
         this.repaint();
     }
 

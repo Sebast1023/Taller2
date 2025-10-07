@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -38,7 +37,7 @@ public class PanelJugador extends JPanel {
         this.foto.setBackground(new Color(235, 235, 235));
         this.foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 
-        nombre = new JLabel(nombres + (indice + 1), JLabel.CENTER);
+        nombre = new JLabel(nombres, JLabel.CENTER);
         nombre.setFont(new Font("SansSerif", Font.PLAIN, 14));
         
         this.add(this.foto, BorderLayout.CENTER);
@@ -57,6 +56,8 @@ public class PanelJugador extends JPanel {
 
     public void setNombre(String nombre) {
         this.nombre.setText(nombre);
+        this.revalidate();
+        this.repaint();
     }
 
     public void setFoto(ImageIcon foto) {

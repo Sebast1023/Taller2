@@ -124,7 +124,7 @@ public class Equipo implements Serializable {
      * @return array de string primero posicion con el array de nombre, seguda posicion con array de apodos
      */
     public String[][] getNombreApodoJugadores() {
-        String[][] nombres = new String[2][jugadores.length];        
+        String[][] nombres = new String[2][jugadores.length];
         for(int i = 0; i < jugadores.length; i++) {
             nombres[0][i] = jugadores[i].getNombre();
             nombres[1][i] = jugadores[i].getApodo();

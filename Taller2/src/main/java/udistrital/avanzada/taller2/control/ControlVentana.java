@@ -1,12 +1,12 @@
 package udistrital.avanzada.taller2.control;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import udistrital.avanzada.taller2.vista.Ventana;
 import javax.swing.JFileChooser;
@@ -146,7 +146,7 @@ public class ControlVentana implements ActionListener {
         ventana.mostrarEquipos();
     }    
     
-    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {   
+    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         
@@ -154,7 +154,7 @@ public class ControlVentana implements ActionListener {
         
         ImageIcon imagenJugador = null;                
         
-        for (int i = 0; i < nombres.length; i++) {                        
+        for (int i = 0; i < nombres[0].length; i++) {
             String nombreArchivo = (equipo == 1) ? "jugadorA" : "jugadorB";
             nombreArchivo =+ (i + 1) + ".png";            
             String ruta = "Specs/data/images/" + nombreArchivo;
@@ -196,17 +196,18 @@ public class ControlVentana implements ActionListener {
     }
     
     public void resetearPuntaje() {
-        Component[] aux = ventana.getPanelesEquipos();
-        for (Component component : aux) {
-            if (component instanceof PanelEquipo) {
-                ((PanelEquipo) component).cambiarPuntajeEquipo(0);
-            }     
+        ArrayList<PanelEquipo> paneles = ventana.getPanelesEquipos();
+        for (PanelEquipo panel : paneles) {
+            panel.cambiarPuntajeEquipo(0);
         }
     }
 
-    public void modificarEquipo(int indice, String nombreEquipo, String[][] nombresApodos) {
-        
-        //TODO llamar a metodo de actulizar equipo de ventana
+    public void modificarEquipo(int indice, String nombreEquipo, String[][] nombres) {
+        PanelEquipo panel = ventana.getPanelEquipo(indice);
+        panel.setNombreEquipo(nombreEquipo);
+        for (int i = 0; i < nombres[0].length; i++) {
+            panel.setDatosJugador(i, nombres[0][i], nombres[1][i]);
+        }
     }
     
     @Override
