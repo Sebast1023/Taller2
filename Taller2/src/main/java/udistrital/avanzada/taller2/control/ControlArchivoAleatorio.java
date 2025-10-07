@@ -10,26 +10,29 @@ import java.util.List;
 import udistrital.avanzada.taller2.modelo.ConexionAleatoria;
 
 /**
- * Clase que maneja logica para la interaccion con los
- * archivos Aleatorios
- * 
+ * Clase que maneja logica para la interaccion con los archivos Aleatorios
+ *
  * @author sebastian
  * @author 07/210/2025
  */
 public class ControlArchivoAleatorio {
+
     private ConexionAleatoria aleatoria;
     private ImpresorConsola impresor;
 
-    /** Rutas por defecto */
-    private final String rutaConfig = "Specs/data/configuracion.properties";
+    /**
+     * Rutas por defecto
+     */
     private final String rutaResultados = "Specs/data/resultados.data";
 
-    /** contador interno de registros (clave) */
+    /**
+     * contador interno de registros (clave)
+     */
     private int contadorClaves = 1;
 
     /**
      * Constructor con inyección de ImpresorConsola
-     * 
+     *
      * @param impresor clase que implenta la interfaz ImpresorConsola
      */
     public ControlArchivoAleatorio(ImpresorConsola impresor) {
@@ -40,16 +43,19 @@ public class ControlArchivoAleatorio {
             impresor.mostrarErrorEnConsola("ControlConexion - no se pudo abrir archivo aleatorio: " + ex.getMessage());
         }
     }
-    
+
     /**
      * Guarda el resultado de un equipo
-     * 
+     *
      * @param nombreEquipo
      * @param nombresJugadores
-     * @param resultado 
+     * @param resultado
      */
     public void guardarResultado(String nombreEquipo, String[] nombresJugadores, String resultado) {
-        if (aleatoria == null) return;
+        System.out.println("guradra");
+        if (aleatoria == null) {
+            return;
+        }
         try {
             aleatoria.escribirRegistro(contadorClaves++, nombreEquipo, nombresJugadores, resultado);
         } catch (IOException ex) {
@@ -57,13 +63,15 @@ public class ControlArchivoAleatorio {
         }
     }
 
-    /** 
+    /**
      * Obtiene todos los resultados guardados
-     * 
-     * @return  Lista de strings con resultados
+     *
+     * @return Lista de strings con resultados
      */
     public List<String> obtenerResultados() {
-        if (aleatoria == null) return java.util.Collections.emptyList();
+        if (aleatoria == null) {
+            return java.util.Collections.emptyList();
+        }
         try {
             return aleatoria.leerRegistros();
         } catch (IOException ex) {
@@ -73,14 +81,15 @@ public class ControlArchivoAleatorio {
     }
 
     /**
-     * Metodo que cierra el archivo aleatorio 
+     * Metodo que cierra el archivo aleatorio
      */
     public void cerrar() {
         try {
-            if (aleatoria != null) aleatoria.cerrar();
+            if (aleatoria != null) {
+                aleatoria.cerrar();                
+            }
         } catch (IOException ex) {
             impresor.mostrarErrorEnConsola("ControlConexion - error cerrando archivo aleatorio: " + ex.getMessage());
         }
     }
 }
-

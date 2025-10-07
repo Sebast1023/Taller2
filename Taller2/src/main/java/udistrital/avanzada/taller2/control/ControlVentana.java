@@ -177,6 +177,15 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      */
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
+    }
+
+    /**
+     * Metodo para pasar de modo elegir archivos a modo juego
+     * @param equipo
+     */
+    public void mostrarGanadores(String nombre, String[][] nombres, int equipo) {
+        PanelEquipo ganador = AgregarEquipo(nombre, nombres, equipo, false);
+        ventana.mostrarGanadores(ganador);
     }    
     
     /**
@@ -185,12 +194,12 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      * @param nombres matriz de strings con nombres poscion 0 y apodos en 1 de los jugadores
      * @param equipo indica si es equipo A si se pasa 1 y B si se pasa 2
      */
-    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
+    public PanelEquipo AgregarEquipo(String nombre, String[][] nombres, int equipo, boolean agregar) {  
         // Creamos los colores segun corresponda
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         // Creamos el panel
-        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje);
+        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre, borde, puntaje, agregar);
 
         ImageIcon imagenJugador = null;
         // recorremos todos los jugadores
@@ -219,6 +228,7 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
                 panelEquipo.setFotoJugador(i, imagenJugador);
             }
         }
+        return panelEquipo;
     }
     
     /**
@@ -287,7 +297,11 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
         PanelEquipo panel = ventana.getPanelEquipo(indice);
         panel.setNombreEquipo(nombreEquipo);
         for (int i = 0; i < nombres[0].length; i++) {
-            panel.setDatosJugador(i, nombres[0][i], nombres[1][i]);
+            String nombreCompuesto = "<html><div style='text-align: center;'>"
+               + "<b>" + nombres[0][i] + "</b><br>"
+               + "(" + nombres[1][i] + ")"
+               + "</div></html>";
+            panel.setDatosJugador(i, nombreCompuesto);
         }
     }
     

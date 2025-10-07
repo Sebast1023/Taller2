@@ -1,5 +1,6 @@
 package udistrital.avanzada.taller2.modelo;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -23,7 +24,19 @@ public class ConexionAleatoria {
     private static final int TAM_NOMBRE_EQUIPO = 30;
     private static final int TAM_NOMBRE_JUGADOR = 20;
     private static final int TAM_RESULTADO = 10;
+    private String rutaResultados;
 
+    /**
+     * Constructor: abre o crea un archivo de acceso aleatorio.
+     *
+     * @throws IOException si no se puede abrir o crear el archivo
+     */
+    public ConexionAleatoria() throws IOException {
+        //Ruta predeterminada
+        this.rutaResultados = "Specs/data/resultados.data";
+        archivo = new RandomAccessFile(rutaResultados, "rw");
+    }
+    
     /**
      * Constructor: abre o crea un archivo de acceso aleatorio.
      *
@@ -31,6 +44,7 @@ public class ConexionAleatoria {
      * @throws IOException si no se puede abrir o crear el archivo
      */
     public ConexionAleatoria(String ruta) throws IOException {
+        this.rutaResultados = ruta;
         archivo = new RandomAccessFile(ruta, "rw");
     }
 
@@ -125,6 +139,12 @@ public class ConexionAleatoria {
     public void cerrar() throws IOException {
         if (archivo != null) {
             archivo.close();
+        }
+        // Borrar Archivo de ruta predereminada
+        File archivoAhora = new File(rutaResultados);
+
+        if (archivoAhora.exists()) {
+            archivoAhora.delete();
         }
     }
 }

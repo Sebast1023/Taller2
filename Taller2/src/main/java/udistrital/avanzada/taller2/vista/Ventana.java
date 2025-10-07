@@ -5,6 +5,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -200,21 +202,36 @@ public class Ventana extends JFrame {
         dialogo.setSize(300, 180);
         dialogo.setLocationRelativeTo(this);
 
-        JPanel panel = new JPanel(new BorderLayout());        
-
+        JPanel panel = new JPanel(new BorderLayout());
 
         JLabel lblTitulo = new JLabel("Resultado del Lanzamiento", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         lblTitulo.setForeground(new Color(60, 30, 10));
         panel.add(lblTitulo, BorderLayout.NORTH);
 
-
         JLabel lblMensaje = new JLabel(mensaje, SwingConstants.CENTER);
-        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));        
+        lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
         panel.add(lblMensaje, BorderLayout.CENTER);
 
         JButton btnCerrar = crearBoton("Vale", new Color(0, 100, 0));
         btnCerrar.addActionListener(e -> dialogo.dispose());
+        btnCerrar.setFocusable(true);
+        btnCerrar.setRequestFocusEnabled(true);
+
+        btnCerrar.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                btnCerrar.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.GREEN, 2), // Borde de foco
+                        BorderFactory.createEmptyBorder(8, 18, 8, 18) // Para mantener el tamaño total
+                ));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                btnCerrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            }
+        });
 
         JPanel botones = new JPanel();
         botones.add(btnCerrar);
@@ -223,6 +240,69 @@ public class Ventana extends JFrame {
 
         dialogo.setContentPane(panel);
         dialogo.setResizable(false);
+
+        dialogo.getRootPane().setDefaultButton(btnCerrar);
+        dialogo.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                btnCerrar.requestFocusInWindow();
+            }
+        });
+        dialogo.setVisible(true);
+
+    }
+    
+    public void mostrarGanadores(PanelEquipo ganador) {
+        
+        JDialog dialogo = new JDialog(this, "", true);
+        dialogo.setSize(500,600);
+        dialogo.setLocationRelativeTo(this);
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JLabel lblTitulo = new JLabel("Ganador", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(new Color(60, 30, 10));
+        panel.add(lblTitulo, BorderLayout.NORTH);
+        panel.add(ganador,BorderLayout.CENTER);
+
+        JButton btnCerrar = crearBoton("Vale", new Color(0, 100, 0));
+        btnCerrar.addActionListener(e -> {
+            dialogo.dispose();
+        });
+        btnCerrar.setFocusable(true);
+        btnCerrar.setRequestFocusEnabled(true);
+
+        btnCerrar.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                btnCerrar.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.GREEN, 2), // Borde de foco
+                        BorderFactory.createEmptyBorder(8, 18, 8, 18) // Para mantener el tamaño total
+                ));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                btnCerrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            }
+        });
+
+        JPanel botones = new JPanel();
+        botones.add(btnCerrar);
+
+        panel.add(botones, BorderLayout.SOUTH);
+
+        dialogo.setContentPane(panel);
+        dialogo.setResizable(false);
+
+        dialogo.getRootPane().setDefaultButton(btnCerrar);
+        dialogo.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {                
+                btnCerrar.requestFocusInWindow();
+            }
+        });
         dialogo.setVisible(true);
 
     }
@@ -288,10 +368,12 @@ public class Ventana extends JFrame {
      * @param colorPuntaje
      * @return PanelEquipo creado
      */
-    public PanelEquipo agregarEquipo(String titulo, Color colorBorde, Color colorPuntaje) {
+    public PanelEquipo agregarEquipo(String titulo, Color colorBorde, Color colorPuntaje, boolean agregar) {
         PanelEquipo panelEquipo = new PanelEquipo(titulo, colorBorde, colorPuntaje);
-        panelEquipos.add(panelEquipo);
-        panelesEquipos.add(panelEquipo);
+        if (agregar) {
+            panelEquipos.add(panelEquipo);
+            panelesEquipos.add(panelEquipo);
+        }        
         return panelEquipo;
     }
 

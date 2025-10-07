@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,7 +26,7 @@ public class PanelJugador extends JPanel {
     public JLabel nombre;
 
     public PanelJugador(String nombres, int indice) {
-        this.setLayout(new BorderLayout(5, 5));
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBackground(new Color(255, 255, 255));
         this.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true),
@@ -35,6 +36,8 @@ public class PanelJugador extends JPanel {
 
         this.foto = new JLabel("📷", JLabel.CENTER);
         this.foto.setPreferredSize(new Dimension(100, 100));
+        this.foto.setMinimumSize(new Dimension(100, 100));
+        this.foto.setMaximumSize(new Dimension(100, 100));
         this.foto.setOpaque(true);
         this.foto.setBackground(new Color(235, 235, 235));
         this.foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));

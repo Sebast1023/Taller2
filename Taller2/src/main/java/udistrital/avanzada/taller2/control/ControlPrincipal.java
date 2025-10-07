@@ -194,8 +194,9 @@ public class ControlPrincipal {
         } else {
             indiceJugador = obtenerNumeroRandom(4);
         }
+        jugadoresAnteriores.add(indiceJugador);
         //Pintamos el jugador random que sacamos anteriormente
-        controlVentana.resaltarJugador(indiceEquipoActual, indiceJugador);
+        controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
 
         String[] jugador = controlEquipo.obtenerNombresJugador(indiceEquipoActual, indiceJugador);
         //Guardamos el inddice del jugador en el indice correspondiente
@@ -276,17 +277,21 @@ public class ControlPrincipal {
             return;
         }
         // TODO Si no hay empate entonces mostrar equipo ganador
+        String nombre = controlEquipo.getNombreEquipo(empatados.get(0));
+        String[][] nombres = controlEquipo.getNombreApodoJugadores(empatados.get(0));
+        controlVentana.mostrarGanadores(nombre, nombres, equipoTurnoActual);
         // ---------------------------------------------------------
         // Guardar resultados de la ronda en el archivo aleatorio:
         // Para cada equipo se grabará "GANÓ" si su puntaje == maximoPuntajeActual
         // en caso contrario "PERDIÓ".
         try {
-            int totalEquipos = controlEquipo.getTamaño();
+            int totalEquipos = equiposJugando.length;
             for (int idx = 0; idx < totalEquipos; idx++) {
                 // obtener equipo por indice
-                String nombreEquipo = controlEquipo.getNombreEquipo(idx);
-                String[] nombresJugadores = controlEquipo.getNombreApodoJugadores(idx)[0];
-                String resultadoEquipo = (controlEquipo.getPuntajeEquipo(idx) == maximoPuntajeActual) ? "GANO" : "PERDIO";
+                System.out.println("guardar");
+                String nombreEquipo = controlEquipo.getNombreEquipo(equiposJugando[idx]);
+                String[] nombresJugadores = controlEquipo.getNombreApodoJugadores(equiposJugando[idx])[0];
+                String resultadoEquipo = (controlEquipo.getPuntajeEquipo(equiposJugando[idx]) == maximoPuntajeActual) ? "GANO" : "PERDIO";
                 controlArchivoA.guardarResultado(nombreEquipo, nombresJugadores, resultadoEquipo);
             }
         } catch (Exception ex) {
@@ -399,7 +404,7 @@ public class ControlPrincipal {
             nombres = controlEquipo.getNombreApodoJugadores(indice);
             // si es la primera partida entonces agregamos el panel
             if (partidasJugadas == 0) {
-                controlVentana.AgregarEquipo(nombre, nombres, i);
+                controlVentana.AgregarEquipo(nombre, nombres, i, true);
                 // Si ya se jugo antes se modifica panel ya existente
             } else {
                 controlVentana.modificarEquipo(i, nombre, nombres);

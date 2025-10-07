@@ -110,9 +110,8 @@ public class PanelEquipo extends JPanel {
      * 
      * @param indice panel a actualizar
      * @param Nombre del jugador
-     * @param Apodo del jugador
      */
-    public void setDatosJugador(int indice, String Nombre, String Apodo) {
+    public void setDatosJugador(int indice, String Nombre) {
         jugadores[indice].setNombre(Nombre);
     }
     
