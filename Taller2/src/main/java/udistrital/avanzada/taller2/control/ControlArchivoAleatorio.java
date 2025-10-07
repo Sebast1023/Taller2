@@ -5,9 +5,9 @@
 package udistrital.avanzada.taller2.control;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import udistrital.avanzada.taller2.modelo.ConexionAleatoria;
-import udistrital.avanzada.taller2.modelo.Equipo;
 
 /**
  *
@@ -54,14 +54,18 @@ public class ControlArchivoAleatorio {
         }
     }
 
-    /** Obtiene todos los resultados guardados */
+    /** 
+     * Obtiene todos los resultados guardados
+     * 
+     * @return  Lista de strings con resultados
+     */
     public List<String> obtenerResultados() {
         if (aleatoria == null) return java.util.Collections.emptyList();
         try {
             return aleatoria.leerRegistros();
         } catch (IOException ex) {
             impresor.mostrarErrorEnConsola("ControlConexion - error leyendo resultados: " + ex.getMessage());
-            return java.util.Collections.emptyList();
+            return Collections.emptyList();
         }
     }
 

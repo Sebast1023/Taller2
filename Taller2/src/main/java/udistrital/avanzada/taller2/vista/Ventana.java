@@ -176,6 +176,13 @@ public class Ventana extends JFrame {
     public void mostrarMensajeEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
+    
+    public void mostrarMensajeEmergenteTiro(String mensaje) {
+        JLabel lblMensaje = new JLabel(mensaje);
+        lblMensaje.setFont(new Font("Arial", Font.BOLD, 16));
+        lblMensaje.setForeground(new Color(0, 102, 204));
+        JOptionPane.showMessageDialog(this, lblMensaje, "Resultado Lanzamiento", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     // metodo para mostrar en la consola
     public void mostrarEnConsola(String mensaje) {

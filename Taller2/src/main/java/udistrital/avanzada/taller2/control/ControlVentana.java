@@ -140,7 +140,16 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
      * @param mensaje
      */
     public void mostraMensajeEmergente(String mensaje) {
-        ventana.mostrarMensajeEmergente(mensaje);
+            ventana.mostrarMensajeEmergente(mensaje);
+    }
+        
+    /**
+     * Metodo para mostrar mensaje en ventana emergente
+     *
+     * @param mensaje
+     */
+    public void mostraMensajeEmergenteTiro(String mensaje) {        
+        ventana.mostrarMensajeEmergenteTiro(mensaje);          
     }
 
     /**
