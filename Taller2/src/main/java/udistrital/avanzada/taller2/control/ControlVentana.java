@@ -157,9 +157,9 @@ public class ControlVentana implements ActionListener, ImpresorConsola {
 
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
-    }
-
-    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {
+    }    
+    
+    public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
         Color borde = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
         Color puntaje = (equipo == 1) ? new Color(139, 69, 19) : new Color(0, 100, 0);
 
