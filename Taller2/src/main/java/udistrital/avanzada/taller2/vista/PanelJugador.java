@@ -1,68 +1,57 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package udistrital.avanzada.taller2.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
- * Clase con el diseño de un jugador
- * 
+ * Panel visual de cada jugador, con diseño moderno y mejor distribución.
+ *
  * @author Mauricio
- * @since 04/10/2025
+ * @modificado por Diego
  */
 public class PanelJugador extends JPanel {
 
-    public JLabel foto;
-    public JLabel nombre;
+    private JLabel foto;
+    private JLabel nombre;
 
     public PanelJugador(String nombres, int indice) {
-        this.setLayout(new BorderLayout(5, 5));
-        this.setBackground(new Color(255, 255, 255));
-        this.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(140, 140));
+        setBackground(new Color(255, 255, 255, 230)); // blanco translúcido
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 170, 120), 2, true),
+                new EmptyBorder(8, 8, 8, 8)
         ));
-        this.setPreferredSize(new Dimension(120, 80));
 
-        this.foto = new JLabel("📷", JLabel.CENTER);
-        this.foto.setPreferredSize(new Dimension(100, 100));
-        this.foto.setOpaque(true);
-        this.foto.setBackground(new Color(235, 235, 235));
-        this.foto.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+        foto = new JLabel("📷", JLabel.CENTER);
+        foto.setPreferredSize(new Dimension(100, 100));
+        foto.setOpaque(true);
+        foto.setBackground(new Color(240, 235, 220));
+        foto.setBorder(BorderFactory.createLineBorder(new Color(180, 150, 100), 2, true));
 
         nombre = new JLabel(nombres, JLabel.CENTER);
-        nombre.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        
-        this.add(this.foto, BorderLayout.CENTER);
-        this.add(nombre, BorderLayout.SOUTH);
+        nombre.setFont(new Font("SansSerif", Font.BOLD, 13));
+        nombre.setForeground(new Color(60, 40, 20));
+        nombre.setBorder(new EmptyBorder(5, 0, 0, 0));
+
+        add(foto, BorderLayout.CENTER);
+        add(nombre, BorderLayout.SOUTH);
     }
-    
+
     public void resaltar() {
-        this.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
-        this.repaint();
+        setBorder(BorderFactory.createLineBorder(new Color(255, 80, 80), 3, true));
     }
 
     public void desResaltar() {
-        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        this.repaint();
+        setBorder(BorderFactory.createLineBorder(new Color(200, 170, 120), 2, true));
     }
 
     public void setNombre(String nombre) {
         this.nombre.setText(nombre);
-        this.revalidate();
-        this.repaint();
     }
 
-    public void setFoto(ImageIcon foto) {
-        this.foto.setIcon(foto);
+    public void setFoto(ImageIcon imagen) {
+        foto.setIcon(imagen);
     }
 }

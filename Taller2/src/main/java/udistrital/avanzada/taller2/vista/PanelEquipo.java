@@ -1,127 +1,75 @@
 package udistrital.avanzada.taller2.vista;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 /**
- * Clase equipo que además de su diseño base maneja los paneles jugador
- * 
- * @author Mauricio
- * @since 04/10/2025
+ * Panel de equipo rediseñado con formato 2x2 para jugadores.
  */
 public class PanelEquipo extends JPanel {
 
     private JPanel contenedorJugadores;
     private PanelJugador[] jugadores;
     private JLabel lblPuntaje;
-    private TitledBorder titledBorderNombreEquipo;
+    private TitledBorder tituloBorde;
 
-    public PanelEquipo(String titulo, Color colorBorde, Color colorPuntaje) {
-        jugadores = new PanelJugador[4];
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        titledBorderNombreEquipo = BorderFactory.createTitledBorder(
+    public PanelEquipo(String nombreEquipo, Color colorBorde, Color colorPuntaje) {
+        setLayout(new BorderLayout(10, 10));
+        setBackground(new Color(255, 250, 240));
+
+        tituloBorde = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(colorBorde, 3, true),
-                titulo,
+                nombreEquipo,
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 20),
                 colorBorde
         );
+        setBorder(tituloBorde);
 
-        this.setBorder(BorderFactory.createCompoundBorder(titledBorderNombreEquipo,
-                BorderFactory.createEmptyBorder(10, 40, 10, 40)
-        )
-        );
-        this.setBackground(new Color(255, 250, 240));
-        // Espacio para 4 jugadores
-        contenedorJugadores = new JPanel(new GridLayout(4, 1, 8, 8));
-        contenedorJugadores.setBackground(new Color(255, 250, 240));
+        // Contenedor 2x2 para los jugadores
+        contenedorJugadores = new JPanel(new GridLayout(2, 2, 8, 8));
+        contenedorJugadores.setOpaque(false);
+
+        jugadores = new PanelJugador[4];
 
         lblPuntaje = new JLabel("Puntaje: 0", JLabel.CENTER);
         lblPuntaje.setFont(new Font("SansSerif", Font.BOLD, 16));
-        lblPuntaje.setForeground(new Color(0, 100, 0));
+        lblPuntaje.setForeground(colorPuntaje);
 
-        this.add(Box.createVerticalStrut(10));
-        this.add(contenedorJugadores);
-        this.add(lblPuntaje);
-        this.add(Box.createVerticalStrut(5));
-        
+        add(contenedorJugadores, BorderLayout.CENTER);
+        add(lblPuntaje, BorderLayout.SOUTH);
     }
-    
-    /**
-     * Metodo para agregar un panelJugador a la lista de paneles y mostrarlo
-     * 
-     * @param Nombre del jugador
-     * @param indice donde insertaremos el panel
-     */
-    public void agregarJugador(String Nombre, int indice) {
-        PanelJugador panelJugador = new PanelJugador(Nombre, indice);
-        contenedorJugadores.add(panelJugador);
-        jugadores[indice] = panelJugador;
-        contenedorJugadores.revalidate();
-        contenedorJugadores.repaint();
-        this.revalidate();
-        this.repaint();
+
+    public void agregarJugador(String nombre, int indice) {
+        PanelJugador pj = new PanelJugador(nombre, indice);
+        jugadores[indice] = pj;
+        contenedorJugadores.add(pj);
     }
-    
-    /**
-     * Metodo para resaltar un jugadro en especifico
-     * 
-     * @param indice 
-     */
+
     public void resaltarJugador(int indice) {
         jugadores[indice].resaltar();
     }
-    
-    /**
-     * Metodo para desresaltar un jugadro en especifico
-     * 
-     * @param indice 
-     */
+
     public void desResaltarJugador(int indice) {
         jugadores[indice].desResaltar();
     }
-    
-    /**
-     * Actualizar puntaje de equipo en interfaz
-     * 
-     * @param puntaje 
-     */
+
     public void cambiarPuntajeEquipo(int puntaje) {
         lblPuntaje.setText("Puntaje: " + puntaje);
     }
 
-    public void setNombreEquipo(String titulo) {
-        titledBorderNombreEquipo.setTitle(titulo);
-        this.revalidate();
-        this.repaint();
+    public void setNombreEquipo(String nombre) {
+        tituloBorde.setTitle(nombre);
+        revalidate();
+        repaint();
     }
-    
-    /**
-     * Metodo para cambiar los datos mostrados del jugador
-     * 
-     * @param indice panel a actualizar
-     * @param Nombre del jugador
-     * @param Apodo del jugador
-     */
-    public void setDatosJugador(int indice, String Nombre, String Apodo) {
-        jugadores[indice].setNombre(Nombre);
+
+    public void setDatosJugador(int indice, String nombre, String apodo) {
+        jugadores[indice].setNombre(nombre);
     }
-    
-    /**
-     * Metodo para actualizar foto de jugador
-     * 
-     * @param indice jugador a actualizar
-     * @param foto imagen ImageIcon
-     */
+
     public void setFotoJugador(int indice, ImageIcon foto) {
         jugadores[indice].setFoto(foto);
     }

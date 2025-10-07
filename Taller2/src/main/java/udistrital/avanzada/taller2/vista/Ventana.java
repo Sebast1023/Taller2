@@ -13,7 +13,7 @@ import udistrital.avanzada.taller2.control.EventoVentanaListener;
 
 /**
  * Clase que muestra la interfaz gráfica
- * 
+ *
  * @author Diego
  * @version 1.2
  * @since 03/10/2025
@@ -45,21 +45,20 @@ public class Ventana extends JFrame {
     // Área de mensajes
     public JTextArea areaMensajes;
 
-    public Ventana(String title, EventoVentanaListener evl) {        
+    public Ventana(String title, EventoVentanaListener evl) {
         super(title);
         setSize(1000, 600);
         setLocationRelativeTo(null); // centrar
-        
-        
+
         // Evento cierre
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent windowEvent) {   
+            public void windowClosing(WindowEvent windowEvent) {
                 evl.salir();
             }
         });
-        
+
         setVisible(true);
     }
 
@@ -77,9 +76,12 @@ public class Ventana extends JFrame {
         panelTitulo.add(texto);
 
         // ===== Panel centro con panelEquipos y PanelArchivos =====
-        panelEquipos = new JPanel(new GridLayout(1, 3, 15, 0));
-        panelEquipos.setBackground(new Color(245, 235, 220));
-        panelEquipos.setBorder(BorderFactory.createEmptyBorder(10, 20, 5, 20));
+        panelEquipos = new JPanel(new GridLayout(1, 3, 25, 0));
+        panelEquipos.setBackground(new Color(250, 245, 235));
+        panelEquipos.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10, 20, 10, 20),
+                BorderFactory.createLineBorder(new Color(180, 150, 100), 2, true)
+        ));
         panelesEquipos = new ArrayList<>();
 
         // Por si los equipos son muy grandes que se pueda hacer Scroll
@@ -90,7 +92,7 @@ public class Ventana extends JFrame {
         );
         // Modificar velocidad de Scrooll
         panelScroll.getVerticalScrollBar().setUnitIncrement(16);
-                
+
         btnArchivoProperties = crearBoton("Escoger archivo propiedades", new Color(70, 130, 180));
         btnArchivoBin = crearBoton("Escoger archivo serializado", new Color(70, 130, 180));
         btnCargarArchivos = crearBoton("Cargar archivos", new Color(70, 130, 180));
@@ -145,7 +147,7 @@ public class Ventana extends JFrame {
         this.add(panelTitulo, BorderLayout.NORTH);
         this.add(panelCentro, BorderLayout.CENTER);
         this.add(panelBotones, BorderLayout.SOUTH);
-        
+
     }
 
     /**
@@ -174,28 +176,27 @@ public class Ventana extends JFrame {
 
     /**
      * Método cuadro de dialgo con mensajes emergentes indicando el componente
-     * 
+     *
      * @param componente
-     * @param mensaje 
+     * @param mensaje
      */
     public void mensajeEmergente(Component componente, String mensaje) {
         JOptionPane.showMessageDialog(componente, mensaje);
     }
-    
+
     /**
-     * Método cuadro de dialogo con mensajes 
-     * 
-     * @param mensaje 
+     * Método cuadro de dialogo con mensajes
+     *
+     * @param mensaje
      */
     public void mostrarMensajeEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
-    
-    
+
     /**
      * Método cuadro de dialgo con informacion del tiro y jugador
-     * 
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void mostrarMensajeEmergenteTiro(String mensaje) {
         JLabel lblMensaje = new JLabel(mensaje);
@@ -206,20 +207,21 @@ public class Ventana extends JFrame {
 
     /**
      * Mostra mensaje en consola
-     * 
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void mostrarEnConsola(String mensaje) {
         System.out.println(mensaje);
     }
-    
+
     /**
      * Mostrar mensaje de error en consola
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void mostrarErrorEnConsola(String mensaje) {
         System.err.println(mensaje);
-    }   
+    }
 
     /**
      * metodo para obtener la instancia de JFileChooser con la cual se escogeran
@@ -255,10 +257,10 @@ public class Ventana extends JFrame {
         fileChooser.setFileFilter(filtro);
         return fileChooser;
     }
-    
+
     /**
      * Metodo para agregar equipo vacio a la interfaz
-     * 
+     *
      * @param titulo
      * @param colorBorde
      * @param colorPuntaje
@@ -270,10 +272,10 @@ public class Ventana extends JFrame {
         panelesEquipos.add(panelEquipo);
         return panelEquipo;
     }
-    
+
     /**
-     * Metodo para mostra panel equipos y quitar panel de eleccion de
-     * de archivos (PanelArchivos)
+     * Metodo para mostra panel equipos y quitar panel de eleccion de de
+     * archivos (PanelArchivos)
      */
     public void mostrarEquipos() {
         cardLayout.show(panelCentro, "Equipos");
@@ -281,9 +283,9 @@ public class Ventana extends JFrame {
         panelCentro.repaint();
         mostrarBotonesJuego();
     }
-    
+
     /**
-     * Metodo para mostrar los botones de ronda 
+     * Metodo para mostrar los botones de ronda
      */
     public void mostrarBotonesJuego() {
         panelBotones.removeAll();
@@ -292,7 +294,7 @@ public class Ventana extends JFrame {
         panelBotones.revalidate();
         panelBotones.repaint();
     }
-    
+
     /**
      * Metodo para mostrar opciones de nueva partida y terminar
      */
@@ -303,7 +305,7 @@ public class Ventana extends JFrame {
         panelBotones.revalidate();
         panelBotones.repaint();
     }
-    
+
     /**
      * Metodo para mostrar solo boton de salida
      */
@@ -316,64 +318,65 @@ public class Ventana extends JFrame {
 
     /**
      * Metodo para resaltar un jugador en especifico
-     * 
+     *
      * @param indiceEquipo
-     * @param indiceJugador 
+     * @param indiceJugador
      */
     public void resaltarJugador(int indiceEquipo, int indiceJugador) {
         PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);
         panelEquipo.resaltarJugador(indiceJugador);
     }
-    
+
     /**
      * Metodo para desresaltar un jugador en especifico
-     * 
+     *
      * @param indiceEquipo
-     * @param indiceJugador 
+     * @param indiceJugador
      */
     public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
         PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);;
         panelEquipo.desResaltarJugador(indiceJugador);
     }
-    
+
     /**
      * Metodo para cambiar el nombre del archivo propiedades escogido
-     * @param nombre 
+     *
+     * @param nombre
      */
     public void setNombreArchivoProp(String nombre) {
         panelArchivos.setLblArchivoPropEscogido(nombre);
     }
-    
+
     /**
      * Metodo para cambiar el nombre del archivo serializado escogido
-     * 
-     * @param nombre 
+     *
+     * @param nombre
      */
     public void setNombreArchivoBin(String nombre) {
         panelArchivos.setLblArchivoBinEscogido(nombre);
     }
 
     /**
-     * Metodo para obtener el origen desde donde se cargan los datos
-     * de los archivos cargados
-     * 
-     * @return 
+     * Metodo para obtener el origen desde donde se cargan los datos de los
+     * archivos cargados
+     *
+     * @return
      */
     public String getSeleccionOrigenCarga() {
         return panelArchivos.getOpcionSeleccionada();
     }
-    
+
     /**
      * Metodo para mostrar la opcion de cargar un archivo serializado
      */
     public void activarEleccionDeArchivoSerializado() {
         panelArchivos.mostrarOpcionSerializador();
     }
-    
+
     /**
      * Metodo para mostrar algun mensaje en PanelArchivos
-     * 
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void mostrarMensajeArchivo(String mensaje) {
         panelArchivos.setLblMensaje(mensaje);
@@ -381,38 +384,38 @@ public class Ventana extends JFrame {
 
     /**
      * Metodo para actualizar puntaje de equipo en especifico
-     * 
+     *
      * @param indice
-     * @param puntaje 
+     * @param puntaje
      */
     public void setPuntajeEquipo(int indice, int puntaje) {
         PanelEquipo pEquipo = panelesEquipos.get(indice);;
         pEquipo.cambiarPuntajeEquipo(puntaje);
     }
-    
+
     /**
      * Metodo para cambiar el nombre de un equipo en especifico
-     * 
+     *
      * @param indice
-     * @param nombre 
+     * @param nombre
      */
     public void setNombreEquipo(int indice, String nombre) {
-        panelesEquipos.get(indice).setNombreEquipo(nombre);        
+        panelesEquipos.get(indice).setNombreEquipo(nombre);
     }
-    
+
     /**
      * Metodo para obtener un PanelEquipo en especifico
-     * 
+     *
      * @param indice
      * @return PanelEqupo
      */
     public PanelEquipo getPanelEquipo(int indice) {
         return panelesEquipos.get(indice);
     }
-    
+
     /**
      * Metodo que obtine los paneles de los equipos creados
-     * 
+     *
      * @return arraylist de PanelEquipo
      */
     public ArrayList<PanelEquipo> getPanelesEquipos() {
