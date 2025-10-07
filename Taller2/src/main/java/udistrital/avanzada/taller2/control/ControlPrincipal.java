@@ -239,7 +239,7 @@ public class ControlPrincipal {
     }
 
     public void lanzar() {
-        if (true) {
+        if (!empate) {
             lanzarArgolla();
         } else {
             lanzarArgollaEmpate();
@@ -348,7 +348,7 @@ public class ControlPrincipal {
             }   
             controlVentana.modificarEquipo(i, nombre, nombres);
             indice += 1; 
-        }
+        }        
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
     }
 
