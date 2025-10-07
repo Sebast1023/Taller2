@@ -84,22 +84,34 @@ public class ControlConexion {
     public void cargarEquipos(Properties props) {
         int numeroEquipos = Integer.parseInt(props.getProperty("numeroequipos", "0"));
         for (int i = 1; i <= numeroEquipos; i++) {
-            boolean completo = true;
+            boolean bandera = true;
             String nombreEquipo = props.getProperty("equipo" + i + ".nombre");
-            if (nombreEquipo == null) continue;
-
-            Equipo equipo = controlEquipo.crearEquipo(nombreEquipo);
+//<<<<<<< HEAD
+//            if (nombreEquipo == null) continue;
+//
+//            Equipo equipo = controlEquipo.crearEquipo(nombreEquipo);
+//=======
+            if (nombreEquipo == null) {
+                continue;
+            }
+            int equipo = controlEquipo.crearEquipo(nombreEquipo);
 
             for (int j = 1; j <= 4; j++) {
                 String nombreJugador = props.getProperty("equipo" + i + ".jugador" + j + ".nombre");
                 String apodoJugador = props.getProperty("equipo" + i + ".jugador" + j + ".apodo");
-                if (nombreJugador == null || apodoJugador == null) completo = false;
+                if (nombreJugador == null || apodoJugador == null) bandera = false;
 
                 Jugador jugador = controlJugador.crearJugador(nombreJugador, apodoJugador);
                 controlEquipo.agregarJugador(equipo, jugador);
             }
+//<<<<<<< HEAD
+//
+//            if (completo) controlEquipo.agregarEquipo(equipo);
+//=======
+            if (!bandera) {
+                controlEquipo.removeEquipo(equipo);
+            }
 
-            if (completo) controlEquipo.agregarEquipo(equipo);
         }
     }
 

@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -29,6 +30,7 @@ public class Ventana extends JFrame {
     private JPanel panelEquipos;
     private CardLayout cardLayout;
     private PanelArchivos panelArchivos;
+    private ArrayList<PanelEquipo> panelesEquipos;
 
     // Botones
     public JButton btnLanzar;
@@ -42,7 +44,7 @@ public class Ventana extends JFrame {
     // Área de mensajes
     public JTextArea areaMensajes;
 
-    public Ventana(String title) {
+    public Ventana(String title) {        
         super(title);
         setSize(1000, 600);
         setLocationRelativeTo(null); // centrar
@@ -62,18 +64,26 @@ public class Ventana extends JFrame {
         texto.setForeground(new Color(60, 30, 10));
         panelTitulo.add(texto);
 
-        // ===== Panel centro con equipos y mensajes =====
-        panelEquipos = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+//<<<<<<< HEAD
+//        // ===== Panel centro con equipos y mensajes =====
+//        panelEquipos = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+//
+//        JPanel wrapper = new JPanel();
+//        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+//        wrapper.add(panelEquipos);
+//
+//        panelEquipos.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+//=======
+        // ===== Panel centro con panelEquipos y PanelArchivos =====
+        panelEquipos = new JPanel(new GridLayout(1, 3, 15, 0));
+        panelEquipos.setBackground(new Color(245, 235, 220));
+        panelEquipos.setBorder(BorderFactory.createEmptyBorder(10, 20, 5, 20));
+        panelesEquipos = new ArrayList<>();
 
-        JPanel wrapper = new JPanel();
-        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        wrapper.add(panelEquipos);
-
-        panelEquipos.setAlignmentX(Component.LEFT_ALIGNMENT);
-        wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panelScroll = new JScrollPane(
-                wrapper,
+                panelEquipos,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
         );
@@ -234,9 +244,10 @@ public class Ventana extends JFrame {
         return fileChooser;
     }
 
-    public PanelEquipo agregarEquipo(String titulo) {
-        PanelEquipo panelEquipo = new PanelEquipo(titulo, Color.green);
+    public PanelEquipo agregarEquipo(String titulo, Color colorBorde, Color colorPuntaje) {
+        PanelEquipo panelEquipo = new PanelEquipo(titulo, colorBorde, colorPuntaje);
         panelEquipos.add(panelEquipo);
+        panelesEquipos.add(panelEquipo);
         return panelEquipo;
     }
 
@@ -271,12 +282,12 @@ public class Ventana extends JFrame {
     }
 
     public void resaltarJugador(int indiceEquipo, int indiceJugador) {
-        PanelEquipo panelEquipo = (PanelEquipo) panelEquipos.getComponent(indiceEquipo);
+        PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);
         panelEquipo.resaltarJugador(indiceJugador);
     }
 
     public void desResaltarJugador(int indiceEquipo, int indiceJugador) {
-        PanelEquipo panelEquipo = (PanelEquipo) panelEquipos.getComponent(indiceEquipo);
+        PanelEquipo panelEquipo = panelesEquipos.get(indiceEquipo);;
         panelEquipo.desResaltarJugador(indiceJugador);
     }
 
@@ -301,12 +312,19 @@ public class Ventana extends JFrame {
     }
 
     public void setPuntajeEquipo(int indice, int puntaje) {
-        PanelEquipo pEquipo = (PanelEquipo) panelEquipos.getComponent(indice);
+        PanelEquipo pEquipo = panelesEquipos.get(indice);;
         pEquipo.cambiarPuntajeEquipo(puntaje);
-
+    }
+    
+    public void setNombreEquipo(int indice, String nombre) {
+        panelesEquipos.get(indice).setNombreEquipo(nombre);        
+    }
+    
+    public PanelEquipo getPanelEquipo(int indice) {
+        return panelesEquipos.get(indice);
     }
 
-    public Component[] getPanelesEquipos() {
-        return panelEquipos.getComponents();
+    public ArrayList<PanelEquipo> getPanelesEquipos() {
+        return panelesEquipos;
     }
 }
