@@ -37,7 +37,6 @@ public class ControlPrincipal {
     private boolean empate;
     private int[] equiposJugando;
 
-    ;
 
     public ControlPrincipal() {
         // inicializar variables logicas
@@ -72,6 +71,7 @@ public class ControlPrincipal {
         if (partidasJugadas == partidasMaximas) {
             return;
         }
+        pintarEquipos();
         // empate falso para que suceda el lanzamiento normal
         empate = false;        
         // resetear variables auxiliares
