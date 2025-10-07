@@ -3,7 +3,9 @@ package udistrital.avanzada.taller2.control;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
+import udistrital.avanzada.taller2.modelo.Equipo;
 
 /**
  * Logica de negocio
@@ -17,7 +19,8 @@ public class ControlPrincipal {
     private ControlVentana controlVentana;
     private ControlEquipo controlEquipo;
     private ControlTiro controlTiro;
-    private ControlConexion controlConexion;
+    ;
+    private ControlArchivoAleatorio controlArchivoA;
     // empatados nos ayuda a saber que equipos estan empatados
     private ArrayList<Integer> empatados;
     // jugadoresAnteriores nos ayuda a saber quien jugo antes en una ronda de empate para que no se repita en la siguiente
@@ -38,7 +41,6 @@ public class ControlPrincipal {
     private boolean empate;
     private int[] equiposJugando;
 
-
     public ControlPrincipal() {
         // inicializar variables logicas
         this.partidasJugadas = 0;
@@ -56,13 +58,13 @@ public class ControlPrincipal {
         this.controlJugador = new ControlJugador();
 
         // crear conexion (inyección simple)
-        this.controlConexion = new ControlConexion(controlEquipo, controlTiro, controlJugador);
         this.controlVentana = new ControlVentana(this);
+        this.controlArchivoA = new ControlArchivoAleatorio(controlVentana);
 
         // Si hay un archivo serializado de equipos en Specs/data entonces mostrar
         // menu de archivos para cargar los dos archivos solicitados .Properties y .bin
         // y escoga desde donde quiere carga la informacion de los equipos
-        if (controlConexion.existeArchivoSerializadoEquipos()) {
+        if (new ControlArchivoSerializado().existeArchivoSerializadoEquipos()) {
             controlVentana.mostrarMenuArchivos();
         }
     }
@@ -70,16 +72,16 @@ public class ControlPrincipal {
     public void nuevaMano() {
         // Si ya se jugaron todas las partidas o la siguiente tiene solo un equipo
         // salir de la funcion
-        boolean condicion = (controlEquipo.getTamaño()/2 == partidasJugadas && controlEquipo.getTamaño()%2 != 0);
-                
-        if (partidasJugadas == partidasMaximas || controlEquipo.getTamaño()/2 == partidasJugadas ||condicion){
+        boolean condicion = (controlEquipo.getTamaño() / 2 == partidasJugadas && controlEquipo.getTamaño() % 2 != 0);
+
+        if (partidasJugadas == partidasMaximas || controlEquipo.getTamaño() / 2 == partidasJugadas || condicion) {
             controlVentana.mostraMenuSalir();
             return;
         }
         // actualizamos que equipos estan jugando
         // pasando a la siguiente pareja de 
-        equiposJugando[0] = partidasJugadas+1;
-        equiposJugando[1] = partidasJugadas+2;
+        equiposJugando[0] = partidasJugadas + 1;
+        equiposJugando[1] = partidasJugadas + 2;
         pintarEquipos();
         // empate falso para que suceda el lanzamiento normal
         empate = false;
@@ -99,7 +101,7 @@ public class ControlPrincipal {
     }
 
     public void lanzarArgolla() {
-        System.out.println(equiposJugando[0]+" "+ equiposJugando[1]);
+        System.out.println(equiposJugando[0] + " " + equiposJugando[1]);
         if (partidasJugadas >= partidasMaximas) {
             return;
         }
@@ -115,7 +117,7 @@ public class ControlPrincipal {
         controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
 
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergente(
+        controlVentana.mostraMensajeEmergenteTiro(
                 jugador[0]
                 + "\n"
                 + jugador[1]
@@ -126,10 +128,14 @@ public class ControlPrincipal {
                 + " puntos"
         );
 
-        //Proximo turno        
+        //Proximo turno
+        // se empieza desde contar desde cero entonces turno uno es el 0
+        // turno maximo dos equipos por mano
         int turnoMaxEquip = 1;
+        // maximos 4 jugadores por turno de equipo
         int turnoMaxJugador = 3;
-
+        
+        // jugador ya hizo su tiro entonces desresaltar
         controlVentana.desResaltarJugador(equipoTurnoActual, jugadorTurnoActual);
 
         // Estamos en el ultimo turno del equipo        
@@ -166,8 +172,9 @@ public class ControlPrincipal {
         }
         // pasar turno a siguiente equipo
         equipoTurnoActual += 1;
-        // Reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
+        // reiniciar turno de jugador para que pase por todos los jugadores del nuevo equipo a jugar
         jugadorTurnoActual = 0;
+        // resaltar jugador en turnno
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
 
     }
@@ -176,7 +183,6 @@ public class ControlPrincipal {
         if (partidasJugadas >= partidasMaximas) {
             return;
         }
-
         // obtenemos el indice del equipo actual que esta guardado en empatados
         int indiceEquipoActual = empatados.get(equipoTurnoActual);
         // indice del jugador que lanza
@@ -190,6 +196,7 @@ public class ControlPrincipal {
         } else {
             indiceJugador = obtenerNumeroRandom(4);
         }
+        //Pintamos el jugador random que sacamos anteriormente
         controlVentana.resaltarJugador(indiceEquipoActual, indiceJugador);
 
         String[] jugador = controlEquipo.obtenerNombresJugador(indiceEquipoActual, indiceJugador);
@@ -214,7 +221,7 @@ public class ControlPrincipal {
         // Actualizar puntaje equipo en ventana puntajeActual
         controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergente(
+        controlVentana.mostraMensajeEmergenteTiro(
                 jugador[0]
                 + "\n"
                 + jugador[1]
@@ -224,7 +231,7 @@ public class ControlPrincipal {
                 + puntaje
                 + " puntos"
         );
-
+        // se acabo turno de jugador entonces desresaltar
         controlVentana.desResaltarJugador(indiceEquipoActual, indiceJugador);
         // Verificar si se termino la ronda de empate
         if (equipoTurnoActual == empatados.size() - 1) {
@@ -244,7 +251,6 @@ public class ControlPrincipal {
         // pasar el turno al siguiente equipo
         if (equipoTurnoActual < empatados.size() - 1) {
             equipoTurnoActual += 1;
-            controlVentana.resaltarJugador(equipoTurnoActual, indiceJugador);
         }
     }
 
@@ -273,8 +279,7 @@ public class ControlPrincipal {
             empate = true;
             return;
         }
-               // TODO Si no hay empate entonces mostrar equipo ganador
-        // TODO guardar info en archivo aleatorio
+        // TODO Si no hay empate entonces mostrar equipo ganador
         // ---------------------------------------------------------
         // Guardar resultados de la ronda en el archivo aleatorio:
         // Para cada equipo se grabará "GANÓ" si su puntaje == maximoPuntajeActual
@@ -283,19 +288,20 @@ public class ControlPrincipal {
             int totalEquipos = controlEquipo.getTamaño();
             for (int idx = 0; idx < totalEquipos; idx++) {
                 // obtener equipo por indice
-                udistrital.avanzada.taller2.modelo.Equipo eq = controlEquipo.getEquipos().get(idx);
+                String nombreEquipo = controlEquipo.getNombreEquipo(idx);
+                String[] nombresJugadores = controlEquipo.getNombreApodoJugadores(idx)[0];
                 String resultadoEquipo = (controlEquipo.getPuntajeEquipo(idx) == maximoPuntajeActual) ? "GANO" : "PERDIO";
-                controlConexion.guardarResultado(eq, resultadoEquipo);
+                controlArchivoA.guardarResultado(nombreEquipo, nombresJugadores, resultadoEquipo);
             }
         } catch (Exception ex) {
-            System.err.println("Error guardando resultados: " + ex.getMessage());
+            controlVentana.mostrarErrorEnConsola("Error guardando resultados: " + ex.getMessage());
         }
 
         // actualizar conteo de partidas y mostrar menús
         this.partidasJugadas += 1;
         // activar modo para lanzamiento normal
         empate = false;
-        if (partidasJugadas >= partidasMaximas || controlEquipo.getTamaño()/2 == partidasJugadas) {
+        if (partidasJugadas >= partidasMaximas || controlEquipo.getTamaño() / 2 == partidasJugadas) {
             controlVentana.mostraMenuSalir();
             // mostar boton salir, ocultar boton de otra partida            
         } else {
@@ -328,14 +334,22 @@ public class ControlPrincipal {
      */
     public void cargarArchivosPrecarga(File propiedades, File serializado, int origen) {
 
-        // Delegamos a controlConexion
+        ControlArchivoSerializado cas = new ControlArchivoSerializado();
+        ControlArchivoPropiedades cap = new ControlArchivoPropiedades();
+        FabricaModelo fabrica = new FabricaModelo(controlEquipo, controlTiro, controlJugador);
+
+        Properties props = cap.cargarArchivo(propiedades);
+        // Simpre cargamos los puntajes desde el properties
+        fabrica.cargarPuntajes(props);
+
         // Si el serializador no existe cargar todo desde properties
         if (serializado == null && origen == 1) {
-            controlConexion.cargarArchivoProperties(propiedades, true);
+            // cargar equipos desde properties
+            fabrica.cargarEquipos(props);
         } else {
             // Se deben cargar los equipos desde serializador
-            controlConexion.cargarArchivoProperties(propiedades, false);
-            controlConexion.cargarArchivoSerializable(serializado, true);
+            ArrayList<Equipo> equipos = cas.cargarArchivoSerializable(serializado);
+            controlEquipo.setEquipos(equipos);
         }
         // Verificamos si podemos iniciar juego
         if (controlEquipo.getTamaño() >= 2 && controlTiro.getTamaño() >= 2) {
@@ -349,39 +363,55 @@ public class ControlPrincipal {
         }
 
     }
+
+    /**
+     * Método que se llama antesde salir de la aplicacion
+     */
     public void salir() {
         // Guardamos equipos antes de salir del juego
+        ControlArchivoSerializado cas = new ControlArchivoSerializado();
+
         if (controlEquipo.getTamaño() > 0) {
-            controlConexion.serializarEquipos(controlEquipo.getEquipos());
+            cas.serializarEquipos(controlEquipo.getEquipos());
         }
         //Mostrar los datos del archivo aleatorio
-        List<String> resultados = controlConexion.obtenerResultados();
-        controlVentana.mostrarResultadosConsola(resultados);
-        controlConexion.cerrar();
+        List<String> resultados = controlArchivoA.obtenerResultados();
+        controlVentana.mostrarResultadosConsola(resultados, "GUARDADOS");
+        controlArchivoA.cerrar();
         System.exit(0);
     }
 
+    /**
+     * Método para que encapsula logica de mostrar los equipos correspondinetes
+     * en la vista
+     */
     private void pintarEquipos() {
         String nombre;
         String[][] nombres;
+        //variable auxiliar que nos ayuda a saber quienes jugaran la ronda
         int indice;
-        if (partidasJugadas == 0){
+
+        if (partidasJugadas == 0) {
             indice = 0;
         } else {
-            indice = partidasJugadas+1;
+            indice = partidasJugadas + 1;
         }
+        // Como son dos equipos por ronda entonces ciclo que recorre 2 veces
         for (int i = 0; i < 2; i++) {
+            // obtenemos datos basicos del equipo
+            nombre = controlEquipo.getNombreEquipo(indice);
+            nombres = controlEquipo.getNombreApodoJugadores(indice);
+            // si es la primera partida entonces agregamos el panel
             if (partidasJugadas == 0) {
-                nombre = controlEquipo.obtenerNombreEquipo(indice);
-                nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.AgregarEquipo(nombre, nombres, i);
+                // Si ya se jugo antes se modifica panel ya existente
             } else {
-                nombre = controlEquipo.obtenerNombreEquipo(indice);
-                nombres = controlEquipo.getNombreApodoJugadores(indice);
                 controlVentana.modificarEquipo(i, nombre, nombres);
-            }            
-            indice += 1; 
-        }        
+            }
+            //pasamo al otro equipo
+            indice += 1;
+        }
+        // resaltar jugador en primer turno de la mano
         controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
     }
 

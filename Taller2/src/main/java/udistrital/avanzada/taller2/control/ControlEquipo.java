@@ -1,7 +1,6 @@
 package udistrital.avanzada.taller2.control;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import udistrital.avanzada.taller2.modelo.Equipo;
 import udistrital.avanzada.taller2.modelo.Jugador;
 
@@ -134,7 +133,7 @@ public class ControlEquipo {
      * @param indice
      * @return
      */
-    public String obtenerNombreEquipo(int indice) {
+    public String getNombreEquipo(int indice) {
         return equipos.get(indice).getNombre();
     }
 

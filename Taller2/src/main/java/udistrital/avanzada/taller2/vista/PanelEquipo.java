@@ -12,8 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 /**
- *
- * @author mauri
+ * Clase equipo que además de su diseño base maneja los paneles jugador
+ * 
+ * @author Mauricio
+ * @since 04/10/2025
  */
 public class PanelEquipo extends JPanel {
 
@@ -53,7 +55,13 @@ public class PanelEquipo extends JPanel {
         this.add(Box.createVerticalStrut(5));
         
     }
-
+    
+    /**
+     * Metodo para agregar un panelJugador a la lista de paneles y mostrarlo
+     * 
+     * @param Nombre del jugador
+     * @param indice donde insertaremos el panel
+     */
     public void agregarJugador(String Nombre, int indice) {
         PanelJugador panelJugador = new PanelJugador(Nombre, indice);
         contenedorJugadores.add(panelJugador);
@@ -63,15 +71,30 @@ public class PanelEquipo extends JPanel {
         this.revalidate();
         this.repaint();
     }
-
+    
+    /**
+     * Metodo para resaltar un jugadro en especifico
+     * 
+     * @param indice 
+     */
     public void resaltarJugador(int indice) {
         jugadores[indice].resaltar();
     }
-
+    
+    /**
+     * Metodo para desresaltar un jugadro en especifico
+     * 
+     * @param indice 
+     */
     public void desResaltarJugador(int indice) {
         jugadores[indice].desResaltar();
     }
-
+    
+    /**
+     * Actualizar puntaje de equipo en interfaz
+     * 
+     * @param puntaje 
+     */
     public void cambiarPuntajeEquipo(int puntaje) {
         lblPuntaje.setText("Puntaje: " + puntaje);
     }
@@ -81,11 +104,24 @@ public class PanelEquipo extends JPanel {
         this.revalidate();
         this.repaint();
     }
-
+    
+    /**
+     * Metodo para cambiar los datos mostrados del jugador
+     * 
+     * @param indice panel a actualizar
+     * @param Nombre del jugador
+     * @param Apodo del jugador
+     */
     public void setDatosJugador(int indice, String Nombre, String Apodo) {
         jugadores[indice].setNombre(Nombre);
     }
-
+    
+    /**
+     * Metodo para actualizar foto de jugador
+     * 
+     * @param indice jugador a actualizar
+     * @param foto imagen ImageIcon
+     */
     public void setFotoJugador(int indice, ImageIcon foto) {
         jugadores[indice].setFoto(foto);
     }
