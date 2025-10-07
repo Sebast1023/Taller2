@@ -67,17 +67,19 @@ public class ControlPrincipal {
         }
     }
 
-    private void iniciarJuego() {
-    }
-
     public void nuevaMano() {
-        // Si ya se jugaron todas las partidas salir de la funcion
+        // Si ya se jugaron todas las partidas o la siguiente tiene solo un equipo
+        // salir de la funcion
         boolean condicion = (controlEquipo.getTamaño()/2 == partidasJugadas && controlEquipo.getTamaño()%2 != 0);
                 
         if (partidasJugadas == partidasMaximas || controlEquipo.getTamaño()/2 == partidasJugadas ||condicion){
             controlVentana.mostraMenuSalir();
             return;
         }
+        // actualizamos que equipos estan jugando
+        // pasando a la siguiente pareja de 
+        equiposJugando[0] = partidasJugadas+1;
+        equiposJugando[1] = partidasJugadas+2;
         pintarEquipos();
         // empate falso para que suceda el lanzamiento normal
         empate = false;
@@ -97,6 +99,7 @@ public class ControlPrincipal {
     }
 
     public void lanzarArgolla() {
+        System.out.println(equiposJugando[0]+" "+ equiposJugando[1]);
         if (partidasJugadas >= partidasMaximas) {
             return;
         }
