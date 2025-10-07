@@ -1,38 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package udistrital.avanzada.taller2.modelo;
+
+import java.io.Serializable;
 
 /**
  * Clase Jugador.java representa a los jugadores del juego Sus instancias seran
- * agrupadas en equipos de a 4
+ * agrupadas en equipos de a 4. Implementa Serializable para que sea serializado
+ * cuando se serializen las listas de equipos
  *
  * @author Mauricio
+ * @version 1.1
  * @since 30/09/2025
  */
-public class Jugador {
+public class Jugador implements Serializable {
 
-    String nombre;
-    String apodo;
-    // imagen de la persona es una ubicacion local
-    String foto;
-
-    // constructor
-    public Jugador() {
-    }
+    private String nombre;
+    private String apodo;
 
     /**
      * Constructor con los parametros
      *
      * @param nombre
      * @param apodo
-     * @param foto ubicacion local de la imagen
      */
-    public Jugador(String nombre, String apodo, String foto) {
+    public Jugador(String nombre, String apodo) {
         this.nombre = nombre;
         this.apodo = apodo;
-        this.foto = foto;
     }
 
     public String getNombre() {
@@ -51,17 +43,9 @@ public class Jugador {
         this.apodo = apodo;
     }
 
-    public String getFoto() {
-        return foto;
+    @Override
+    public String toString() {
+        String aux = nombre + " " + apodo;
+        return aux;
     }
-
-    /**
-     * metodo setter de la foto
-     *
-     * @param foto ubicacion local de la imagen
-     */
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
 }
