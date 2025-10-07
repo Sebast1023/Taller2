@@ -14,8 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
- * @author mauri
+ * Clase con el diseño de un jugador
+ * 
+ * @author Mauricio
+ * @since 04/10/2025
  */
 public class PanelJugador extends JPanel {
 
@@ -43,7 +45,7 @@ public class PanelJugador extends JPanel {
         this.add(this.foto, BorderLayout.CENTER);
         this.add(nombre, BorderLayout.SOUTH);
     }
-
+    
     public void resaltar() {
         this.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
         this.repaint();
