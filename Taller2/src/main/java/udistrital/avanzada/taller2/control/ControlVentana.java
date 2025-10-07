@@ -146,13 +146,6 @@ public class ControlVentana implements ActionListener {
 
     public void mostrarEquipos() {
         ventana.mostrarEquipos();
-//<<<<<<< HEAD
-//    }
-//
-//    public void AgregarEquipo(String nombre, String[] nombres, String[] apodos) {
-//        PanelEquipo panelEquipo = ventana.agregarEquipo(nombre);
-//        for (int i = 0; i < nombres.length; i++) {
-//            panelEquipo.agregarJugador(nombres[i], i);
     }    
     
     public void AgregarEquipo(String nombre, String[][] nombres, int equipo) {  
