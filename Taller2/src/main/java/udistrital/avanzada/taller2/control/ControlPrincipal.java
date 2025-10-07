@@ -117,15 +117,13 @@ public class ControlPrincipal {
         controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
 
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergenteTiro(
-                jugador[0]
-                + "\n"
-                + jugador[1]
-                + "\nhizo "
-                + nombreTiro
-                + " obteniendo "
-                + puntaje
-                + " puntos"
+        // Usamos html para mejor la informacion
+        controlVentana.mostrarMensajeEmergenteTiro(
+                "<html><div style='text-align:center;'>"
+               + jugador[0] + " (" + jugador[1] + ")<br>"
+               + "hizo <b>" + nombreTiro + "</b><br>"
+               + "obteniendo <b>" + puntaje + "</b> puntos"
+               + "</div></html>"
         );
 
         //Proximo turno
@@ -221,15 +219,13 @@ public class ControlPrincipal {
         // Actualizar puntaje equipo en ventana puntajeActual
         controlVentana.setPuntajeEquipo(equipoTurnoActual, puntajeEquipoActual);
         // Pintar jugada en ventana
-        controlVentana.mostraMensajeEmergenteTiro(
-                jugador[0]
-                + "\n"
-                + jugador[1]
-                + "\nhizo "
-                + nombreTiro
-                + " obteniendo "
-                + puntaje
-                + " puntos"
+        // Usamos html para mejor la informacion
+        controlVentana.mostrarMensajeEmergenteTiro(
+                "<html><div style='text-align:center;'>"
+               + jugador[0] + " (" + jugador[1] + ")<br>"
+               + "hizo <b>" + nombreTiro + "</b><br>"
+               + "obteniendo <b>" + puntaje + "</b> puntos"
+               + "</div></html>"
         );
         // se acabo turno de jugador entonces desresaltar
         controlVentana.desResaltarJugador(indiceEquipoActual, indiceJugador);
@@ -272,7 +268,7 @@ public class ControlPrincipal {
         equipoTurnoActual = 0;
         // Si hay empate jugar hasta desempate
         if (empatados.size() > 1) {
-            controlVentana.mostraMensajeEmergente("Hay empate");
+            controlVentana.mostrarMensajeEmergente("Hay empate");
             //Cambiar el actionCommand del boton lanzar a LanzarEmpate
             controlVentana.resaltarJugador(equipoTurnoActual, jugadorTurnoActual);
             // activar modo de lanzamiento empate

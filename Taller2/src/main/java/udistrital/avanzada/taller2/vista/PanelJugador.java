@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * Clase con el diseño de un jugador
- * 
+ *
  * @author Mauricio
  * @since 04/10/2025
  */
@@ -41,16 +41,22 @@ public class PanelJugador extends JPanel {
 
         nombre = new JLabel(nombres, JLabel.CENTER);
         nombre.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        
+
         this.add(this.foto, BorderLayout.CENTER);
         this.add(nombre, BorderLayout.SOUTH);
     }
-    
+
+    /**
+     * Metodo para cambiar color de borde
+     */
     public void resaltar() {
         this.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
         this.repaint();
     }
 
+    /**
+     * Metodo para cambiar color de borde a predeterminado
+     */
     public void desResaltar() {
         this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
         this.repaint();

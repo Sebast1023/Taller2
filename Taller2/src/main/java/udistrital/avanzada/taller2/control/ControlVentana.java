@@ -141,7 +141,7 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      *
      * @param mensaje
      */
-    public void mostraMensajeEmergente(String mensaje) {
+    public void mostrarMensajeEmergente(String mensaje) {
             ventana.mostrarMensajeEmergente(mensaje);
     }
         
@@ -150,7 +150,7 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
      *
      * @param mensaje
      */
-    public void mostraMensajeEmergenteTiro(String mensaje) {        
+    public void mostrarMensajeEmergenteTiro(String mensaje) {        
         ventana.mostrarMensajeEmergenteTiro(mensaje);          
     }
 
@@ -209,7 +209,11 @@ public class ControlVentana implements ActionListener, ImpresorConsola, EventoVe
                 imagenJugador = new ImageIcon(img);
             }
             // Agremos el jugaddor al panel equipo
-            panelEquipo.agregarJugador(nombres[0][i], i);
+            String nombreCompuesto = "<html><div style='text-align: center;'>"
+               + "<b>" + nombres[0][i] + "</b><br>"
+               + "(" + nombres[1][i] + ")"
+               + "</div></html>";
+            panelEquipo.agregarJugador(nombreCompuesto, i);
             // Si la imagen es valida le hacemos set para que se muestre
             if (imagenJugador != null) {
                 panelEquipo.setFotoJugador(i, imagenJugador);
